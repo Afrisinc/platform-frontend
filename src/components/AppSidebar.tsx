@@ -6,22 +6,22 @@ import { usePlatform } from "@/contexts/PlatformContext";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
+  id: string;
   label: string;
   icon: React.ElementType;
-  active?: boolean;
 }
 
 const platformNav: NavItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Products", icon: Package },
-  { label: "Members", icon: Users },
-  { label: "API Keys", icon: Key },
-  { label: "Billing", icon: CreditCard },
-  { label: "Settings", icon: Settings },
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "products", label: "Products", icon: Package },
+  { id: "members", label: "Members", icon: Users },
+  { id: "api-keys", label: "API Keys", icon: Key },
+  { id: "billing", label: "Billing", icon: CreditCard },
+  { id: "settings", label: "Settings", icon: Settings },
 ];
 
 export function AppSidebar() {
-  const { sidebarCollapsed, setSidebarCollapsed } = usePlatform();
+  const { sidebarCollapsed, setSidebarCollapsed, activePage, setActivePage } = usePlatform();
 
   return (
     <aside
@@ -34,11 +34,12 @@ export function AppSidebar() {
         <nav className="space-y-0.5">
           {platformNav.map((item) => (
             <button
-              key={item.label}
+              key={item.id}
+              onClick={() => setActivePage(item.id)}
               className={cn(
                 "flex items-center gap-3 w-full rounded-lg text-sm font-medium transition-colors",
                 sidebarCollapsed ? "justify-center px-2 py-2.5" : "px-3 py-2",
-                item.active
+                activePage === item.id
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
               )}
