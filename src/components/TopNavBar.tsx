@@ -1,25 +1,17 @@
-import { Search, Bell, ChevronDown, Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Search, Bell, ChevronDown } from "lucide-react";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { ProductSwitcher } from "./ProductSwitcher";
-import { usePlatform } from "@/contexts/PlatformContext";
 
 export function TopNavBar() {
-  const { currentProduct } = usePlatform();
-  const navigate = useNavigate();
-
   return (
     <header className="h-14 border-b border-border bg-card flex items-center px-4 gap-2 shrink-0 z-30">
       {/* Left: Logo */}
-      <button
-        onClick={() => navigate("/")}
-        className="flex items-center gap-2 mr-4 hover:opacity-80 transition-opacity"
-      >
+      <div className="flex items-center gap-2 mr-4">
         <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
           <span className="text-primary-foreground font-bold text-sm">A</span>
         </div>
         <span className="font-bold text-lg tracking-tight hidden sm:inline">Afrisinc</span>
-      </button>
+      </div>
 
       <div className="h-6 w-px bg-border mx-1 hidden sm:block" />
 
@@ -27,17 +19,6 @@ export function TopNavBar() {
       <WorkspaceSwitcher />
       <div className="h-6 w-px bg-border mx-1 hidden sm:block" />
       <ProductSwitcher />
-
-      {/* Current product indicator */}
-      {currentProduct && (
-        <button
-          onClick={() => navigate("/")}
-          className="hidden md:flex items-center gap-1.5 ml-2 px-2 py-1 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-        >
-          <Home className="h-3 w-3" />
-          Back to Hub
-        </button>
-      )}
 
       <div className="flex-1" />
 

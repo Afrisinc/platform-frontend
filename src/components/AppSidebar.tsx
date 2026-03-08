@@ -1,6 +1,5 @@
 import {
   LayoutDashboard, Package, Users, Key, CreditCard, Settings,
-  Bell, FileText, Send, ScrollText, Webhook,
   PanelLeftClose, PanelLeft
 } from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
@@ -21,22 +20,8 @@ const platformNav: NavItem[] = [
   { label: "Settings", icon: Settings },
 ];
 
-const notifyNav: NavItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Templates", icon: FileText },
-  { label: "Campaigns", icon: Send },
-  { label: "Logs", icon: ScrollText },
-  { label: "Webhooks", icon: Webhook },
-  { label: "Settings", icon: Settings },
-];
-
-const productNavMap: Record<string, NavItem[]> = {
-  notify: notifyNav,
-};
-
 export function AppSidebar() {
-  const { currentProduct, sidebarCollapsed, setSidebarCollapsed } = usePlatform();
-  const navItems = currentProduct ? (productNavMap[currentProduct.id] || platformNav) : platformNav;
+  const { sidebarCollapsed, setSidebarCollapsed } = usePlatform();
 
   return (
     <aside
@@ -46,13 +31,8 @@ export function AppSidebar() {
       )}
     >
       <div className="flex-1 py-3 px-2">
-        {!sidebarCollapsed && currentProduct && (
-          <div className="px-3 pb-3 mb-1">
-            <span className="text-xs font-semibold text-primary uppercase tracking-wider">{currentProduct.name}</span>
-          </div>
-        )}
         <nav className="space-y-0.5">
-          {navItems.map((item) => (
+          {platformNav.map((item) => (
             <button
               key={item.label}
               className={cn(

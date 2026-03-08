@@ -12,6 +12,7 @@ export interface Product {
   description: string;
   icon: string;
   color: string;
+  url: string;
 }
 
 interface PlatformContextType {
@@ -19,8 +20,6 @@ interface PlatformContextType {
   currentWorkspace: Workspace;
   setCurrentWorkspace: (ws: Workspace) => void;
   products: Product[];
-  currentProduct: Product | null;
-  setCurrentProduct: (p: Product | null) => void;
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (v: boolean) => void;
 }
@@ -32,17 +31,16 @@ const workspaces: Workspace[] = [
 ];
 
 const products: Product[] = [
-  { id: "notify", name: "Notify", description: "Send email, SMS and push notifications.", icon: "Bell", color: "202 97% 45%" },
-  { id: "crm", name: "CRM", description: "Manage customer relationships.", icon: "Users", color: "152 60% 42%" },
-  { id: "billing", name: "Billing", description: "Manage subscriptions and payments.", icon: "CreditCard", color: "38 92% 50%" },
-  { id: "analytics", name: "Analytics", description: "View metrics and reports.", icon: "BarChart3", color: "270 60% 55%" },
+  { id: "notify", name: "Notify", description: "Send email, SMS and push notifications.", icon: "Bell", color: "202 97% 45%", url: "https://notify.afrisinc.com/app" },
+  { id: "crm", name: "CRM", description: "Manage customer relationships.", icon: "Users", color: "152 60% 42%", url: "https://crm.afrisinc.com/app" },
+  { id: "billing", name: "Billing", description: "Manage subscriptions and payments.", icon: "CreditCard", color: "38 92% 50%", url: "https://billing.afrisinc.com/app" },
+  { id: "analytics", name: "Analytics", description: "View metrics and reports.", icon: "BarChart3", color: "270 60% 55%", url: "https://analytics.afrisinc.com/app" },
 ];
 
 const PlatformContext = createContext<PlatformContextType | null>(null);
 
 export function PlatformProvider({ children }: { children: ReactNode }) {
   const [currentWorkspace, setCurrentWorkspace] = useState(workspaces[0]);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -52,8 +50,6 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
         currentWorkspace,
         setCurrentWorkspace,
         products,
-        currentProduct,
-        setCurrentProduct,
         sidebarCollapsed,
         setSidebarCollapsed,
       }}
