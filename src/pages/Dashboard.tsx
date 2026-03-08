@@ -1,5 +1,4 @@
-import { Bell, Users, CreditCard, BarChart3, ArrowRight, TrendingUp, Activity, Zap, Clock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Bell, Users, CreditCard, BarChart3, ArrowRight, ExternalLink, TrendingUp, Activity, Zap, Clock } from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -23,7 +22,6 @@ const activities = [
 
 export default function Dashboard() {
   const { currentWorkspace, products } = usePlatform();
-  const navigate = useNavigate();
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-8 animate-fade-in">
@@ -60,10 +58,12 @@ export default function Dashboard() {
           {products.map((p) => {
             const Icon = iconMap[p.icon];
             return (
-              <button
+              <a
                 key={p.id}
-                onClick={() => navigate(`/products/${p.id}`)}
-                className="bg-card rounded-xl border border-border p-5 text-left hover:shadow-md hover:border-primary/30 transition-all group"
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-card rounded-xl border border-border p-5 text-left hover:shadow-md hover:border-primary/30 transition-all group block"
               >
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
@@ -74,9 +74,9 @@ export default function Dashboard() {
                 <h3 className="font-semibold mb-1">{p.name}</h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{p.description}</p>
                 <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Open product <ArrowRight className="h-3.5 w-3.5" />
+                  Open product <ExternalLink className="h-3.5 w-3.5" />
                 </span>
-              </button>
+              </a>
             );
           })}
         </div>
