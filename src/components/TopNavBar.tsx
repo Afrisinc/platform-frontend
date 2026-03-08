@@ -30,6 +30,8 @@ export function TopNavBar() {
         <kbd className="hidden lg:inline-flex h-5 items-center gap-1 rounded border border-border px-1.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
       </button>
 
+      <ThemeToggle />
+
       <button className="relative p-2 rounded-lg hover:bg-secondary transition-colors">
         <Bell className="h-4.5 w-4.5 text-muted-foreground" />
         <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
