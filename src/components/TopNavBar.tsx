@@ -15,20 +15,18 @@ export function TopNavBar() {
 
       <div className="h-6 w-px bg-border mx-1 hidden sm:block" />
 
-      {/* Center: Switchers */}
+      {/* Switchers */}
       <WorkspaceSwitcher />
       <div className="h-6 w-px bg-border mx-1 hidden sm:block" />
       <ProductSwitcher />
 
       <div className="flex-1" />
 
-      {/* Right: Search, Notifications, Avatar */}
+      {/* Right */}
       <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary hover:bg-muted transition-colors text-sm text-muted-foreground">
         <Search className="h-4 w-4" />
         <span className="hidden md:inline">Search...</span>
-        <kbd className="hidden lg:inline-flex h-5 items-center gap-1 rounded border border-border px-1.5 font-mono text-[10px] text-muted-foreground">
-          ⌘K
-        </kbd>
+        <kbd className="hidden lg:inline-flex h-5 items-center gap-1 rounded border border-border px-1.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
       </button>
 
       <button className="relative p-2 rounded-lg hover:bg-secondary transition-colors">
