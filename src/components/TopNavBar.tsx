@@ -1,5 +1,6 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { ProductSwitcher } from "./ProductSwitcher";
 
 export function TopNavBar() {
