@@ -1,5 +1,6 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { ProductSwitcher } from "./ProductSwitcher";
 
 export function TopNavBar() {
@@ -28,6 +29,8 @@ export function TopNavBar() {
         <span className="hidden md:inline">Search...</span>
         <kbd className="hidden lg:inline-flex h-5 items-center gap-1 rounded border border-border px-1.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
       </button>
+
+      <ThemeToggle />
 
       <button className="relative p-2 rounded-lg hover:bg-secondary transition-colors">
         <Bell className="h-4.5 w-4.5 text-muted-foreground" />
