@@ -3,7 +3,8 @@ import { Shield, AlertTriangle, X } from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
 
 export default function SettingsPage() {
-  const { currentWorkspace } = usePlatform();
+  const { products } = usePlatform();
+  const currentWorkspace = { name: "Afrisinc Ltd" }; // compat shim
   const [showDelete, setShowDelete] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
 
