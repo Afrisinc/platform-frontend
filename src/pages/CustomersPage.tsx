@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Search, Filter, ArrowUpDown, ExternalLink, X, Globe, Ticket, Key, Clock } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
+  ExternalLink,
+  X,
+  Globe,
+  Ticket,
+  Key,
+  Clock,
+} from "lucide-react";
 import { usePlatform, Customer } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
 import { StatusBadge } from "@/components/control/StatusBadge";
@@ -9,23 +19,14 @@ import { StatCard } from "@/components/control/StatCard";
 import { UserAvatar } from "@/components/control/UserAvatar";
 
 // ── Customer profile slide-over ────────────────────────────────────────────────
-function CustomerProfile({
-  customer,
-  onClose,
-}: {
-  customer: Customer;
-  onClose: () => void;
-}) {
+function CustomerProfile({ customer, onClose }: { customer: Customer; onClose: () => void }) {
   const { tickets, can } = usePlatform();
   const customerTickets = tickets.filter((t) => t.customerId === customer.id);
 
   return (
     <>
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40" onClick={onClose} />
       {/* Panel */}
       <aside className="fixed right-0 top-0 h-full w-full max-w-md bg-card border-l border-border shadow-xl z-50 overflow-y-auto">
         {/* Header */}
@@ -42,7 +43,13 @@ function CustomerProfile({
         <div className="p-6 space-y-6">
           {/* Identity */}
           <div className="flex items-start gap-4">
-            <UserAvatar initials={customer.name.split(" ").map((n) => n[0]).join("")} size="lg" />
+            <UserAvatar
+              initials={customer.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+              size="lg"
+            />
             <div>
               <h3 className="font-semibold text-foreground">{customer.name}</h3>
               <p className="text-sm text-muted-foreground">{customer.email}</p>
@@ -58,9 +65,21 @@ function CustomerProfile({
             <SectionLabel className="mb-3">Account Details</SectionLabel>
             <div className="bg-muted/40 rounded-lg divide-y divide-border">
               {[
-                { label: "Account Created", value: new Date(customer.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) },
+                {
+                  label: "Account Created",
+                  value: new Date(customer.createdAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }),
+                },
                 { label: "Last Activity", value: customer.lastActivity },
-                { label: "Products", value: customer.products.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(", ") },
+                {
+                  label: "Products",
+                  value: customer.products
+                    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+                    .join(", "),
+                },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between px-4 py-3">
                   <span className="text-xs text-muted-foreground">{row.label}</span>
@@ -98,7 +117,9 @@ function CustomerProfile({
                 ].map((row) => (
                   <div key={row.label} className="flex items-center justify-between px-4 py-3">
                     <span className="text-xs text-muted-foreground">{row.label}</span>
-                    <span className="text-sm font-medium text-foreground font-mono text-xs">{row.value}</span>
+                    <span className="text-sm font-medium text-foreground font-mono text-xs">
+                      {row.value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -117,12 +138,11 @@ function CustomerProfile({
             ) : (
               <div className="space-y-2">
                 {customerTickets.map((t) => (
-                  <div
-                    key={t.id}
-                    className="bg-muted/40 rounded-lg px-4 py-3"
-                  >
+                  <div key={t.id} className="bg-muted/40 rounded-lg px-4 py-3">
                     <div className="flex items-start gap-2 justify-between">
-                      <p className="text-sm font-medium text-foreground leading-snug">{t.subject}</p>
+                      <p className="text-sm font-medium text-foreground leading-snug">
+                        {t.subject}
+                      </p>
                       <StatusBadge label={t.status} variant="ticket-status" />
                     </div>
                     <div className="flex items-center gap-2 mt-1.5">
@@ -158,10 +178,10 @@ export default function CustomersPage() {
     return matchSearch && matchStatus;
   });
 
-  const activeCount    = customers.filter((c) => c.status === "Active").length;
+  const activeCount = customers.filter((c) => c.status === "Active").length;
   const suspendedCount = customers.filter((c) => c.status === "Suspended").length;
-  const inactiveCount  = customers.filter((c) => c.status === "Inactive").length;
-  const isReadOnly     = !can("edit_customers");
+  const inactiveCount = customers.filter((c) => c.status === "Inactive").length;
+  const isReadOnly = !can("edit_customers");
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-fade-in">
@@ -178,9 +198,30 @@ export default function CustomersPage() {
 
       {/* Stat row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Active"    value={activeCount}    icon={Globe} changeType="positive" iconBg="bg-success/10"     iconColor="text-success" />
-        <StatCard label="Suspended" value={suspendedCount} icon={Globe} changeType="negative" iconBg="bg-destructive/10" iconColor="text-destructive" />
-        <StatCard label="Inactive"  value={inactiveCount}  icon={Clock} changeType="neutral"  iconBg="bg-muted"          iconColor="text-muted-foreground" />
+        <StatCard
+          label="Active"
+          value={activeCount}
+          icon={Globe}
+          changeType="positive"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
+        <StatCard
+          label="Suspended"
+          value={suspendedCount}
+          icon={Globe}
+          changeType="negative"
+          iconBg="bg-destructive/10"
+          iconColor="text-destructive"
+        />
+        <StatCard
+          label="Inactive"
+          value={inactiveCount}
+          icon={Clock}
+          changeType="neutral"
+          iconBg="bg-muted"
+          iconColor="text-muted-foreground"
+        />
       </div>
 
       {/* Filters */}
@@ -221,17 +262,19 @@ export default function CustomersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-t border-border bg-muted/40">
-                {["Customer", "Company", "Status", "Products", "Last Activity", "API Usage"].map((col) => (
-                  <th
-                    key={col}
-                    className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                  >
-                    <span className="flex items-center gap-1">
-                      {col}
-                      {col === "Last Activity" && <ArrowUpDown className="h-3 w-3 opacity-50" />}
-                    </span>
-                  </th>
-                ))}
+                {["Customer", "Company", "Status", "Products", "Last Activity", "API Usage"].map(
+                  (col) => (
+                    <th
+                      key={col}
+                      className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                    >
+                      <span className="flex items-center gap-1">
+                        {col}
+                        {col === "Last Activity" && <ArrowUpDown className="h-3 w-3 opacity-50" />}
+                      </span>
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -254,9 +297,17 @@ export default function CustomersPage() {
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <UserAvatar initials={c.name.split(" ").map((n) => n[0]).join("")} size="sm" />
+                        <UserAvatar
+                          initials={c.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                          size="sm"
+                        />
                         <div>
-                          <p className="font-medium text-foreground group-hover:text-primary transition-colors">{c.name}</p>
+                          <p className="font-medium text-foreground group-hover:text-primary transition-colors">
+                            {c.name}
+                          </p>
                           <p className="text-xs text-muted-foreground">{c.email}</p>
                         </div>
                       </div>
@@ -268,7 +319,10 @@ export default function CustomersPage() {
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {c.products.map((p) => (
-                          <span key={p} className="px-2 py-0.5 rounded-full text-xs bg-accent text-accent-foreground border border-accent-foreground/10 font-medium">
+                          <span
+                            key={p}
+                            className="px-2 py-0.5 rounded-full text-xs bg-accent text-accent-foreground border border-accent-foreground/10 font-medium"
+                          >
                             {p.charAt(0).toUpperCase() + p.slice(1)}
                           </span>
                         ))}
@@ -291,17 +345,13 @@ export default function CustomersPage() {
             <p className="text-xs text-muted-foreground">
               Showing {filtered.length} of {customers.length} customers
             </p>
-            {isReadOnly && (
-              <p className="text-xs text-muted-foreground italic">Read-only view</p>
-            )}
+            {isReadOnly && <p className="text-xs text-muted-foreground italic">Read-only view</p>}
           </div>
         )}
       </div>
 
       {/* Profile slide-over */}
-      {selected && (
-        <CustomerProfile customer={selected} onClose={() => setSelected(null)} />
-      )}
+      {selected && <CustomerProfile customer={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }

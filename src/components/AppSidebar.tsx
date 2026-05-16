@@ -1,86 +1,152 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard, Users, Ticket, BarChart3,
-  UserCog, Settings2, CreditCard, ClipboardList,
-  ShieldCheck, PanelLeftClose, PanelLeft, ChevronRight,
-  Bell, Package, BarChart2, Layers,
+  LayoutDashboard,
+  Users,
+  Ticket,
+  BarChart3,
+  UserCog,
+  Settings2,
+  CreditCard,
+  ClipboardList,
+  ShieldCheck,
+  PanelLeftClose,
+  PanelLeft,
+  ChevronRight,
+  Bell,
+  Package,
+  BarChart2,
+  Layers,
 } from "lucide-react";
-import { usePlatform, ControlRole, Permission } from "@/contexts/PlatformContext";
+import { usePlatform } from "@/contexts/PlatformContext";
 import type { BackendSidebarItem } from "@/lib/platformApi";
 import { cn } from "@/lib/utils";
 
 // ── Product icon registry ─────────────────────────────────────────────────────
 const PRODUCT_ICONS: Record<string, React.ElementType> = {
-  notify:    Bell,
-  crm:       Layers,
-  payments:  CreditCard,
+  notify: Bell,
+  crm: Layers,
+  payments: CreditCard,
   analytics: BarChart2,
 };
 
 // ── Icon registry for backend sidebar items ───────────────────────────────────
 // Maps the `icon` string stored in the DB to a Lucide component.
 const ICON_REGISTRY: Record<string, React.ElementType> = {
-  LayoutDashboard, Dashboard: LayoutDashboard,
-  Users, Customers: Users,
-  Ticket, Tickets: Ticket,
-  BarChart3, Reports: BarChart3, "Reports & Analytics": BarChart3,
-  BarChart2, Analytics: BarChart2,
-  UserCog, "User Management": UserCog,
-  Settings2, Settings: Settings2,
-  CreditCard, Billing: CreditCard, Payments: CreditCard,
-  ClipboardList, "Audit Log": ClipboardList,
-  ShieldCheck, "Platform Settings": ShieldCheck,
-  Bell, Notify: Bell,
-  Layers, CRM: Layers,
+  LayoutDashboard,
+  Dashboard: LayoutDashboard,
+  Users,
+  Customers: Users,
+  Ticket,
+  Tickets: Ticket,
+  BarChart3,
+  Reports: BarChart3,
+  "Reports & Analytics": BarChart3,
+  BarChart2,
+  Analytics: BarChart2,
+  UserCog,
+  "User Management": UserCog,
+  Settings2,
+  Settings: Settings2,
+  CreditCard,
+  Billing: CreditCard,
+  Payments: CreditCard,
+  ClipboardList,
+  "Audit Log": ClipboardList,
+  ShieldCheck,
+  "Platform Settings": ShieldCheck,
+  Roles: ShieldCheck,
+  Bell,
+  Notify: Bell,
+  Layers,
+  CRM: Layers,
   Package,
+};
+
+// ── Backend icon name → registry key mapping ───────────────────────────────
+// Converts kebab-case backend icon names to registry keys
+const BACKEND_ICON_MAP: Record<string, string> = {
+  "layout-dashboard": "Dashboard",
+  users: "Users",
+  building: "Organization",
+  "credit-card": "Billing",
+  headphones: "Notify",
+  box: "Package",
+  settings: "Settings",
+  list: "Users",
+  shield: "Roles",
+  lock: "ShieldCheck",
+  info: "Settings",
+  "users-group": "Users",
+  receipt: "CreditCard",
+  repeat: "CreditCard",
+  ticket: "Ticket",
+  book: "Package",
+  sliders: "Settings",
+  "shield-alert": "ShieldCheck",
+  "file-text": "ClipboardList",
+};
+
+function getIconFromBackend(icon?: string): React.ElementType {
+  if (!icon) return Package;
+  const registryKey = BACKEND_ICON_MAP[icon] || icon;
+  return ICON_REGISTRY[registryKey] || ICON_REGISTRY[icon] || Package;
+}
+
+// Maps backend item path → frontend page ID.
+// Paths are stripped of leading slash and lowercased before lookup.
+const PATH_MAP: Record<string, string> = {
+  dashboard: "dashboard",
+  customers: "customers",
+  tickets: "tickets",
+  "support-tickets": "tickets",
+  reports: "reports",
+  "reports-analytics": "reports",
+  "user-management": "user-management",
+  users: "user-management",
+  "all-users": "user-management",
+  billing: "billing",
+  "billing-service": "billing",
+  subscriptions: "billing",
+  invoices: "billing",
+  "audit-log": "audit-log",
+  "platform-settings": "platform-settings",
+  system: "platform-settings",
+  settings: "settings",
+  "organization-info": "organization-info",
+  "organization/info": "organization-info", // Handle slash format from backend
+  organization: "organization",
+  "organization/members": "organization-members", // Handle slash format from backend
+  "organization-members": "organization-members",
+  members: "organization-members",
+  "admin-control": "admin-control",
+  "control-centre": "admin-control",
+  "admin-roles": "admin-roles",
+  roles: "admin-roles",
+  "admin-permissions": "admin-permissions",
+  permissions: "admin-permissions",
+  "admin-sidebar": "admin-sidebar",
+  menus: "admin-sidebar",
+  // Product labels that appear as sidebar items
+  "notification-service": "notifications",
+  notifications: "notifications",
+  "afrisinc-control": "dashboard",
+  "media-service": "media",
+  media: "media",
 };
 
 /** Derive the frontend page ID from a backend sidebar item's path or label. */
 function derivedPageId(item: BackendSidebarItem): string {
   if (item.path) {
-    const clean = item.path.replace(/^\/+/, '').toLowerCase();
-    const PATH_MAP: Record<string, string> = {
-      dashboard:           'dashboard',
-      customers:           'customers',
-      tickets:             'tickets',
-      'support-tickets':   'tickets',
-      reports:             'reports',
-      'reports-analytics': 'reports',
-      'user-management':   'user-management',
-      billing:             'billing',
-      'audit-log':         'audit-log',
-      'platform-settings': 'platform-settings',
-      settings:            'settings',
-    };
+    const clean = item.path.replace(/^\/+/, "").toLowerCase();
     return PATH_MAP[clean] ?? clean;
   }
-  // Fall back to label-derived ID
-  return item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  if (!item.label) return item.id ?? "unknown";
+  return item.label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
-
-// ── Static nav config (used when backend sidebar items are unavailable) ───────
-interface NavItem {
-  id: string;
-  label: string;
-  icon: React.ElementType;
-  permission?: Permission;
-  roles?: ControlRole[];
-  divider?: boolean;
-}
-
-const STATIC_NAV_ITEMS: NavItem[] = [
-  { id: "customers",         label: "Customers",           icon: Users,         permission: "view_customers",  divider: true },
-  { id: "tickets",           label: "Support Tickets",     icon: Ticket,        permission: "view_tickets" },
-  { id: "reports",           label: "Reports & Analytics", icon: BarChart3,     permission: "view_reports",    divider: true },
-  { id: "user-management",   label: "User Management",     icon: UserCog,       permission: "manage_users",    divider: true },
-  { id: "billing",           label: "Billing",             icon: CreditCard,    permission: "view_billing" },
-  { id: "audit-log",         label: "Audit Log",           icon: ClipboardList, permission: "view_audit" },
-  { id: "platform-settings", label: "Platform Settings",   icon: ShieldCheck,   roles: ["super_admin"],        divider: true },
-  { id: "settings",          label: "Settings",            icon: Settings2,     permission: "configure_product", divider: true },
-  // Admin management pages (super_admin only)
-  { id: "admin-roles",       label: "Manage Roles",        icon: ShieldCheck,   roles: ["super_admin"] },
-  { id: "admin-permissions", label: "Manage Permissions",  icon: ClipboardList, roles: ["super_admin"] },
-  { id: "admin-sidebar",     label: "Manage Menus",        icon: Layers,        roles: ["super_admin"] },
-];
 
 // ── Reusable nav button ───────────────────────────────────────────────────────
 interface NavButtonProps {
@@ -90,27 +156,59 @@ interface NavButtonProps {
   onClick: () => void;
   divider?: boolean;
   collapsed: boolean;
+  hasChildren?: boolean;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
+  indent?: number;
 }
 
-function NavButton({ label, icon: Icon, isActive, onClick, divider, collapsed }: NavButtonProps) {
+function NavButton({
+  label,
+  icon: Icon,
+  isActive,
+  onClick,
+  divider,
+  collapsed,
+  hasChildren,
+  isExpanded,
+  onToggleExpand,
+  indent = 0,
+}: NavButtonProps) {
+  const handleClick = () => {
+    // Parent items (with children) in expanded sidebar: toggle expand/collapse
+    if (hasChildren && !collapsed) {
+      onToggleExpand?.();
+    }
+    // Leaf items or collapsed sidebar: navigate
+    else if (!hasChildren) {
+      onClick();
+    }
+    // Parent items in collapsed sidebar: don't do anything (user should expand first)
+  };
+
   return (
     <div>
       {divider && <div className="my-1.5 border-t border-sidebar-border" />}
       <button
-        onClick={onClick}
+        onClick={handleClick}
         title={collapsed ? label : undefined}
         className={cn(
           "group relative flex items-center w-full rounded-lg text-sm font-medium transition-all duration-150",
           collapsed ? "justify-center px-0 py-2.5" : "gap-3 px-3 py-2",
-          isActive
+          isActive && !hasChildren
             ? "bg-sidebar-accent text-sidebar-accent-foreground"
             : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
         )}
+        style={!collapsed && indent ? { paddingLeft: `${12 + indent * 12}px` } : undefined}
       >
         <Icon className={cn("shrink-0 transition-colors", collapsed ? "h-5 w-5" : "h-4 w-4")} />
         {!collapsed && <span className="flex-1 text-left">{label}</span>}
-        {!collapsed && isActive && <ChevronRight className="h-3 w-3 opacity-50" />}
-        {/* Tooltip when collapsed */}
+        {!collapsed && hasChildren && (
+          <ChevronRight
+            className={cn("h-3 w-3 opacity-50 transition-transform", isExpanded && "rotate-90")}
+          />
+        )}
+        {!collapsed && !hasChildren && isActive && <ChevronRight className="h-3 w-3 opacity-50" />}
         {collapsed && (
           <span className="absolute left-full ml-2.5 px-2 py-1 rounded-md bg-popover border border-border text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-md">
             {label}
@@ -123,60 +221,89 @@ function NavButton({ label, icon: Icon, isActive, onClick, divider, collapsed }:
 
 // ── Sidebar component ─────────────────────────────────────────────────────────
 export function AppSidebar() {
+  const navigate = useNavigate();
   const {
-    currentUser, can, hasProductAccess,
-    products, backendSidebarItems,
-    sidebarCollapsed, setSidebarCollapsed,
-    activePage, setActivePage,
-    activeProductId, setActiveProductId, setActiveProductTab,
+    hasProductAccess,
+    products,
+    backendSidebarItems,
+    sidebarCollapsed,
+    setSidebarCollapsed,
+    activePage,
+    setActivePage,
+    activeProductId,
+    setActiveProductId,
+    setActiveProductTab,
   } = usePlatform();
+
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
   // Products this user can access (Active only)
   const accessibleProducts = products.filter(
     (p) => p.status === "Active" && hasProductAccess(p.id)
   );
 
-  // ── Render backend sidebar items (when available) ─────────────────────────
-  function renderBackendItems(items: BackendSidebarItem[]) {
-    return items.map((item, idx) => {
-      const Icon = ICON_REGISTRY[item.icon ?? ""] ?? ICON_REGISTRY[item.label] ?? Package;
-      const pageId = derivedPageId(item);
-      const isActive = activePage === pageId;
-      const showDivider = idx > 0 && item.order % 10 === 0;
+  // ── Toggle expand/collapse for parent items ────────────────────────────
+  const toggleExpanded = (itemId: string) => {
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(itemId)) {
+        next.delete(itemId);
+      } else {
+        next.add(itemId);
+      }
+      return next;
+    });
+  };
 
-      return (
+  // ── Recursive item renderer (handles parent + children) ──────────────────
+  function renderSidebarItem(
+    item: BackendSidebarItem,
+    idx: number,
+    indent: number = 0
+  ): React.ReactNode {
+    const Icon = getIconFromBackend(item.icon);
+    const pageId = derivedPageId(item);
+    const isActive = activePage === pageId;
+    const hasChildren = (item.children?.length ?? 0) > 0;
+    const isExpanded = expandedItems.has(item.id);
+    const showDivider = idx > 0 && (item.order ?? 0) % 10 === 0;
+
+    return (
+      <div key={item.id}>
         <NavButton
-          key={item.id}
-          label={item.label}
+          label={item.label ?? item.path ?? pageId}
           icon={Icon}
-          isActive={isActive}
-          onClick={() => setActivePage(pageId)}
+          isActive={isActive && !hasChildren}
+          onClick={() => {
+            // Only navigate if it's a leaf item (no children)
+            if (!hasChildren && item.path) {
+              navigate(item.path);
+              setActivePage(pageId);
+            }
+          }}
           divider={showDivider}
           collapsed={sidebarCollapsed}
+          hasChildren={hasChildren}
+          isExpanded={isExpanded}
+          onToggleExpand={() => toggleExpanded(item.id)}
+          indent={indent}
         />
-      );
-    });
+        {hasChildren && isExpanded && !sidebarCollapsed && (
+          <div className="space-y-0.5">
+            {item.children!.map((child, childIdx) =>
+              renderSidebarItem(child, childIdx, indent + 1)
+            )}
+          </div>
+        )}
+      </div>
+    );
   }
 
-  // ── Render static nav items (fallback) ───────────────────────────────────
-  function renderStaticItems() {
-    const visible = STATIC_NAV_ITEMS.filter((item) => {
-      if (item.roles && !item.roles.includes(currentUser.role)) return false;
-      if (item.permission && !can(item.permission)) return false;
-      return true;
-    });
-
-    return visible.map((item) => (
-      <NavButton
-        key={item.id}
-        label={item.label}
-        icon={item.icon}
-        isActive={activePage === item.id}
-        onClick={() => setActivePage(item.id)}
-        divider={item.divider}
-        collapsed={sidebarCollapsed}
-      />
-    ));
+  // ── Render backend sidebar items (when available) ─────────────────────────
+  function renderBackendItems(items: BackendSidebarItem[]) {
+    return items
+      .filter((item) => item.isActive !== false && (item.label || item.path) && !item.parentId)
+      .map((item, idx) => renderSidebarItem(item, idx));
   }
 
   return (
@@ -186,14 +313,30 @@ export function AppSidebar() {
         sidebarCollapsed ? "w-[60px]" : "w-56"
       )}
     >
-      <div className="flex-1 py-3 px-2 overflow-y-auto space-y-0.5">
+      {/* ── Logo header ────────────────────────────────────────────────────── */}
+      <div
+        className={cn(
+          "flex items-center justify-center border-b border-sidebar-border py-3",
+          sidebarCollapsed ? "px-2" : "px-3"
+        )}
+      >
+        <img
+          src="/afrisic-logo.png"
+          alt="Afrisinc"
+          className={cn("rounded-lg shadow-sm", sidebarCollapsed ? "w-8 h-8" : "w-10 h-10")}
+        />
+      </div>
 
+      <div className="flex-1 py-3 px-2 overflow-y-auto space-y-0.5">
         {/* ── Dashboard (always first) ───────────────────────────────────── */}
         <NavButton
           label="Dashboard"
           icon={LayoutDashboard}
           isActive={activePage === "dashboard"}
-          onClick={() => setActivePage("dashboard")}
+          onClick={() => {
+            navigate("/dashboard");
+            setActivePage("dashboard");
+          }}
           collapsed={sidebarCollapsed}
         />
 
@@ -216,6 +359,7 @@ export function AppSidebar() {
                   icon={Icon}
                   isActive={isActive}
                   onClick={() => {
+                    navigate(`/product/${product.id}`);
                     setActivePage("product");
                     setActiveProductId(product.id);
                     setActiveProductTab("overview");
@@ -228,10 +372,9 @@ export function AppSidebar() {
         )}
 
         {/* ── Platform nav items ─────────────────────────────────────────── */}
-        {/* Use backend-provided items when available, fall back to static config */}
-        {backendSidebarItems && backendSidebarItems.length > 0
-          ? renderBackendItems(backendSidebarItems)
-          : renderStaticItems()}
+        {backendSidebarItems &&
+          backendSidebarItems.length > 0 &&
+          renderBackendItems(backendSidebarItems)}
       </div>
 
       {/* Collapse toggle */}

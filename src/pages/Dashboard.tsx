@@ -1,7 +1,17 @@
 import {
-  Users, Ticket, BarChart3, Bell, Clock, TrendingUp,
-  UserPlus, Key, CheckCircle2, AlertCircle, AlertTriangle,
-  ArrowRight, Zap,
+  Users,
+  Ticket,
+  BarChart3,
+  Bell,
+  Clock,
+  TrendingUp,
+  UserPlus,
+  Key,
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  ArrowRight,
+  Zap,
 } from "lucide-react";
 import { usePlatform, ROLE_LABELS } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
@@ -19,8 +29,8 @@ function firstName(name: string) {
 function AdminDashboard() {
   const { customers, tickets, teamMembers, auditLog } = usePlatform();
 
-  const openTickets   = tickets.filter((t) => t.status === "Open").length;
-  const escalated     = tickets.filter((t) => t.status === "Escalated").length;
+  const openTickets = tickets.filter((t) => t.status === "Open").length;
+  const escalated = tickets.filter((t) => t.status === "Escalated").length;
   const activeCustomers = customers.filter((c) => c.status === "Active").length;
   const activeMembers = teamMembers.filter((m) => m.status === "Active").length;
 
@@ -69,11 +79,16 @@ function AdminDashboard() {
         <div className="bg-card rounded-xl border border-border p-6">
           <div className="flex items-center justify-between mb-4">
             <SectionLabel>Recent Tickets</SectionLabel>
-            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">View all</span>
+            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">
+              View all
+            </span>
           </div>
           <div className="space-y-3">
             {tickets.slice(0, 5).map((t) => (
-              <div key={t.id} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
+              <div
+                key={t.id}
+                className="flex items-start gap-3 py-2 border-b border-border last:border-0"
+              >
                 <div className="mt-0.5">
                   {t.status === "Escalated" ? (
                     <AlertCircle className="h-4 w-4 text-destructive" />
@@ -85,7 +100,9 @@ function AdminDashboard() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{t.subject}</p>
-                  <p className="text-xs text-muted-foreground">{t.customerName} · {t.id}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.customerName} · {t.id}
+                  </p>
                 </div>
                 <StatusBadge label={t.status} variant="ticket-status" />
               </div>
@@ -97,18 +114,32 @@ function AdminDashboard() {
         <div className="bg-card rounded-xl border border-border p-6">
           <div className="flex items-center justify-between mb-4">
             <SectionLabel>Audit Log — Recent</SectionLabel>
-            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">View all</span>
+            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">
+              View all
+            </span>
           </div>
           <div className="space-y-3">
             {auditLog.slice(0, 5).map((event) => (
-              <div key={event.id} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
-                <UserAvatar initials={event.userName.split(" ").map((n) => n[0]).join("")} size="sm" />
+              <div
+                key={event.id}
+                className="flex items-start gap-3 py-2 border-b border-border last:border-0"
+              >
+                <UserAvatar
+                  initials={event.userName
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                  size="sm"
+                />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">{event.action}</p>
                   <p className="text-xs text-muted-foreground truncate">{event.description}</p>
                 </div>
                 <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
-                  {new Date(event.timestamp).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                  {new Date(event.timestamp).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })}
                 </span>
               </div>
             ))}
@@ -153,23 +184,49 @@ function ProductManagerDashboard() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Notify Customers" value={customers.length} icon={Users} change="All assigned to Notify" changeType="neutral" />
-        <StatCard label="Open Tickets" value={openCount} icon={Ticket} changeType="neutral" iconBg="bg-warning/10" iconColor="text-warning" />
-        <StatCard label="Resolved Tickets" value={resolvedToday} icon={CheckCircle2} change="All time" changeType="neutral" iconBg="bg-success/10" iconColor="text-success" />
+        <StatCard
+          label="Notify Customers"
+          value={customers.length}
+          icon={Users}
+          change="All assigned to Notify"
+          changeType="neutral"
+        />
+        <StatCard
+          label="Open Tickets"
+          value={openCount}
+          icon={Ticket}
+          changeType="neutral"
+          iconBg="bg-warning/10"
+          iconColor="text-warning"
+        />
+        <StatCard
+          label="Resolved Tickets"
+          value={resolvedToday}
+          icon={CheckCircle2}
+          change="All time"
+          changeType="neutral"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
       </div>
       <div className="bg-card rounded-xl border border-border p-6">
         <SectionLabel className="mb-4">Notify — Open Tickets</SectionLabel>
         <div className="space-y-3">
-          {notifyTickets.filter((t) => t.status !== "Resolved").map((t) => (
-            <div key={t.id} className="flex items-center gap-3 py-2 border-b border-border last:border-0">
-              <StatusBadge label={t.priority} variant="ticket-priority" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{t.subject}</p>
-                <p className="text-xs text-muted-foreground">{t.customerName}</p>
+          {notifyTickets
+            .filter((t) => t.status !== "Resolved")
+            .map((t) => (
+              <div
+                key={t.id}
+                className="flex items-center gap-3 py-2 border-b border-border last:border-0"
+              >
+                <StatusBadge label={t.priority} variant="ticket-priority" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{t.subject}</p>
+                  <p className="text-xs text-muted-foreground">{t.customerName}</p>
+                </div>
+                <StatusBadge label={t.status} variant="ticket-status" />
               </div>
-              <StatusBadge label={t.status} variant="ticket-status" />
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </>
@@ -179,16 +236,34 @@ function ProductManagerDashboard() {
 // ── Support Agent / Lead view ──────────────────────────────────────────────────
 function SupportDashboard() {
   const { tickets, currentUser } = usePlatform();
-  const myTickets = tickets.filter(
-    (t) => t.assignedTo === currentUser.name || t.status === "Open"
-  );
+  const myTickets = tickets.filter((t) => t.assignedTo === currentUser.name || t.status === "Open");
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="My Open Tickets" value={myTickets.filter((t) => t.status === "Open" || t.status === "In Progress").length} icon={Ticket} changeType="neutral" iconBg="bg-warning/10" iconColor="text-warning" />
-        <StatCard label="Awaiting Customer" value={myTickets.filter((t) => t.status === "Waiting on Customer").length} icon={Clock} changeType="neutral" />
-        <StatCard label="Resolved This Week" value={tickets.filter((t) => t.status === "Resolved").length} icon={CheckCircle2} change="All agents" changeType="positive" iconBg="bg-success/10" iconColor="text-success" />
+        <StatCard
+          label="My Open Tickets"
+          value={myTickets.filter((t) => t.status === "Open" || t.status === "In Progress").length}
+          icon={Ticket}
+          changeType="neutral"
+          iconBg="bg-warning/10"
+          iconColor="text-warning"
+        />
+        <StatCard
+          label="Awaiting Customer"
+          value={myTickets.filter((t) => t.status === "Waiting on Customer").length}
+          icon={Clock}
+          changeType="neutral"
+        />
+        <StatCard
+          label="Resolved This Week"
+          value={tickets.filter((t) => t.status === "Resolved").length}
+          icon={CheckCircle2}
+          change="All agents"
+          changeType="positive"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
       </div>
       <div className="bg-card rounded-xl border border-border p-6">
         <SectionLabel className="mb-4">My Queue</SectionLabel>
@@ -200,11 +275,16 @@ function SupportDashboard() {
         ) : (
           <div className="space-y-3">
             {myTickets.slice(0, 6).map((t) => (
-              <div key={t.id} className="flex items-center gap-3 py-2 border-b border-border last:border-0">
+              <div
+                key={t.id}
+                className="flex items-center gap-3 py-2 border-b border-border last:border-0"
+              >
                 <StatusBadge label={t.priority} variant="ticket-priority" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{t.subject}</p>
-                  <p className="text-xs text-muted-foreground">{t.customerName} · {t.id}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.customerName} · {t.id}
+                  </p>
                 </div>
                 <StatusBadge label={t.status} variant="ticket-status" />
               </div>
@@ -222,14 +302,40 @@ function AnalystDashboard() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Customers" value={customers.length} icon={Users} changeType="neutral" />
+        <StatCard
+          label="Total Customers"
+          value={customers.length}
+          icon={Users}
+          changeType="neutral"
+        />
         <StatCard label="Total Tickets" value={tickets.length} icon={Ticket} changeType="neutral" />
-        <StatCard label="Resolved" value={tickets.filter((t) => t.status === "Resolved").length} icon={CheckCircle2} change="All time" changeType="positive" iconBg="bg-success/10" iconColor="text-success" />
-        <StatCard label="Escalated" value={tickets.filter((t) => t.status === "Escalated").length} icon={AlertCircle} changeType={tickets.filter((t) => t.status === "Escalated").length > 0 ? "negative" : "neutral"} iconBg="bg-destructive/10" iconColor="text-destructive" />
+        <StatCard
+          label="Resolved"
+          value={tickets.filter((t) => t.status === "Resolved").length}
+          icon={CheckCircle2}
+          change="All time"
+          changeType="positive"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
+        <StatCard
+          label="Escalated"
+          value={tickets.filter((t) => t.status === "Escalated").length}
+          icon={AlertCircle}
+          changeType={
+            tickets.filter((t) => t.status === "Escalated").length > 0 ? "negative" : "neutral"
+          }
+          iconBg="bg-destructive/10"
+          iconColor="text-destructive"
+        />
       </div>
       <div className="bg-card rounded-xl border border-border p-5 flex items-center gap-4 text-sm text-muted-foreground">
         <TrendingUp className="h-5 w-5 text-primary shrink-0" />
-        <p>You have read-only access. Navigate to <strong className="text-foreground">Reports & Analytics</strong> for full charts and export options.</p>
+        <p>
+          You have read-only access. Navigate to{" "}
+          <strong className="text-foreground">Reports & Analytics</strong> for full charts and
+          export options.
+        </p>
       </div>
     </>
   );
@@ -262,14 +368,14 @@ export default function Dashboard() {
   const role = currentUser.role;
 
   const subtitleMap: Partial<Record<typeof role, string>> = {
-    super_admin:     "Platform overview — all products, team, and recent activity.",
-    ops_manager:     "Team overview — escalations, onboarding, and recent sign-ups.",
+    super_admin: "Platform overview — all products, team, and recent activity.",
+    ops_manager: "Team overview — escalations, onboarding, and recent sign-ups.",
     product_manager: "Notify overview — delivery stats, tickets, and customer activity.",
-    support_lead:    "Support overview — queue status, escalations, and team performance.",
-    support_agent:   "Your queue — assigned tickets and today's activity.",
+    support_lead: "Support overview — queue status, escalations, and team performance.",
+    support_agent: "Your queue — assigned tickets and today's activity.",
     technical_agent: "Technical queue — escalated issues awaiting your attention.",
-    analyst:         "Read-only summary — navigate to Reports for full analytics.",
-    finance_admin:   "Billing summary — subscription and payment status.",
+    analyst: "Read-only summary — navigate to Reports for full analytics.",
+    finance_admin: "Billing summary — subscription and payment status.",
   };
 
   return (
@@ -281,7 +387,9 @@ export default function Dashboard() {
 
       {(role === "super_admin" || role === "ops_manager") && <AdminDashboard />}
       {role === "product_manager" && <ProductManagerDashboard />}
-      {(role === "support_agent" || role === "support_lead" || role === "technical_agent") && <SupportDashboard />}
+      {(role === "support_agent" || role === "support_lead" || role === "technical_agent") && (
+        <SupportDashboard />
+      )}
       {role === "analyst" && <AnalystDashboard />}
       {role === "finance_admin" && <FinanceDashboard />}
     </div>

@@ -3,18 +3,18 @@
  * Full CRUD operations for roles with permission and sidebar assignments
  */
 
-import React, { useEffect, useState } from 'react';
-import { Plus, AlertCircle } from 'lucide-react';
-import { usePlatform } from '@/contexts/PlatformContext';
-import { useAdminRoles } from '@/hooks/useAdminRoles';
-import { useAdminPermissions } from '@/hooks/useAdminPermissions';
-import { useAdminSidebarItems } from '@/hooks/useAdminSidebarItems';
-import { useRoleAssignments } from '@/hooks/useRoleAssignments';
-import { PageHeader } from '@/components/control/PageHeader';
-import { AdminTable } from '@/components/admin/AdminTable';
-import { AdminFormModal } from '@/components/admin/AdminFormModal';
-import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
-import type { Role, FormField } from '@/types/admin';
+import React, { useEffect, useState } from "react";
+import { Plus, AlertCircle } from "lucide-react";
+import { usePlatform } from "@/contexts/PlatformContext";
+import { useAdminRoles } from "@/hooks/useAdminRoles";
+import { useAdminPermissions } from "@/hooks/useAdminPermissions";
+import { useAdminSidebarItems } from "@/hooks/useAdminSidebarItems";
+import { useRoleAssignments } from "@/hooks/useRoleAssignments";
+import { PageHeader } from "@/components/control/PageHeader";
+import { AdminTable } from "@/components/admin/AdminTable";
+import { AdminFormModal } from "@/components/admin/AdminFormModal";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import type { Role, FormField } from "@/types/admin";
 
 interface RoleWithStats extends Role {
   permissionCount?: number;
@@ -40,7 +40,7 @@ export default function RoleManagementPage() {
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
   const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
   const [showAssignmentModal, setShowAssignmentModal] = useState(false);
-  const [assignmentType, setAssignmentType] = useState<'permissions' | 'sidebar'>('permissions');
+  const [assignmentType, setAssignmentType] = useState<"permissions" | "sidebar">("permissions");
 
   // Load data on mount
   useEffect(() => {
@@ -64,19 +64,19 @@ export default function RoleManagementPage() {
   // Form fields for role creation/editing
   const formFields: FormField[] = [
     {
-      name: 'name',
-      label: 'Role Name',
-      type: 'text',
-      placeholder: 'e.g., Super Admin, Editor',
-      value: editingRoleId ? roles.find((r) => r.id === editingRoleId)?.name : '',
+      name: "name",
+      label: "Role Name",
+      type: "text",
+      placeholder: "e.g., Super Admin, Editor",
+      value: editingRoleId ? roles.find((r) => r.id === editingRoleId)?.name : "",
       required: true,
     },
     {
-      name: 'description',
-      label: 'Description',
-      type: 'textarea',
-      placeholder: 'Describe the purpose of this role',
-      value: editingRoleId ? roles.find((r) => r.id === editingRoleId)?.description : '',
+      name: "description",
+      label: "Description",
+      type: "textarea",
+      placeholder: "Describe the purpose of this role",
+      value: editingRoleId ? roles.find((r) => r.id === editingRoleId)?.description : "",
     },
   ];
 
@@ -175,14 +175,18 @@ export default function RoleManagementPage() {
           <AdminTable<RoleWithStats>
             columns={[
               {
-                key: 'name',
-                label: 'Name',
+                key: "name",
+                label: "Name",
                 render: (value) => <span className="font-medium">{String(value)}</span>,
               },
               {
-                key: 'description',
-                label: 'Description',
-                render: (value) => <span className="text-sm text-muted-foreground line-clamp-2">{String(value || '-')}</span>,
+                key: "description",
+                label: "Description",
+                render: (value) => (
+                  <span className="text-sm text-muted-foreground line-clamp-2">
+                    {String(value || "-")}
+                  </span>
+                ),
               },
             ]}
             data={roles as RoleWithStats[]}
@@ -200,18 +204,24 @@ export default function RoleManagementPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-xl font-semibold text-foreground">{selectedRole.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{selectedRole.description || 'No description'}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {selectedRole.description || "No description"}
+                  </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                 <div>
                   <p className="text-xs text-muted-foreground">Permissions Assigned</p>
-                  <p className="text-2xl font-semibold text-foreground mt-1">{roleAssignments.permissions.length}</p>
+                  <p className="text-2xl font-semibold text-foreground mt-1">
+                    {roleAssignments.permissions.length}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Sidebar Items</p>
-                  <p className="text-2xl font-semibold text-foreground mt-1">{roleAssignments.sidebarItems.length}</p>
+                  <p className="text-2xl font-semibold text-foreground mt-1">
+                    {roleAssignments.sidebarItems.length}
+                  </p>
                 </div>
               </div>
             </div>
@@ -222,7 +232,7 @@ export default function RoleManagementPage() {
                 <h4 className="font-semibold text-foreground">Permissions</h4>
                 <button
                   onClick={() => {
-                    setAssignmentType('permissions');
+                    setAssignmentType("permissions");
                     setShowAssignmentModal(true);
                   }}
                   className="text-sm px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
@@ -262,7 +272,7 @@ export default function RoleManagementPage() {
                 <h4 className="font-semibold text-foreground">Sidebar Items</h4>
                 <button
                   onClick={() => {
-                    setAssignmentType('sidebar');
+                    setAssignmentType("sidebar");
                     setShowAssignmentModal(true);
                   }}
                   className="text-sm px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
@@ -304,7 +314,7 @@ export default function RoleManagementPage() {
 
       {/* Form Modal */}
       <AdminFormModal
-        title={editingRoleId ? 'Edit Role' : 'Create Role'}
+        title={editingRoleId ? "Edit Role" : "Create Role"}
         fields={formFields}
         onSubmit={handleFormSubmit}
         onClose={() => {
@@ -332,17 +342,19 @@ export default function RoleManagementPage() {
       {/* Assignment Modal (Permissions or Sidebar) */}
       {showAssignmentModal && selectedRole && roleAssignments && (
         <AssignmentModal
-          title={assignmentType === 'permissions' ? 'Manage Permissions' : 'Manage Sidebar Items'}
-          availableItems={assignmentType === 'permissions' ? allPermissions : allSidebarItems}
+          title={assignmentType === "permissions" ? "Manage Permissions" : "Manage Sidebar Items"}
+          availableItems={assignmentType === "permissions" ? allPermissions : allSidebarItems}
           selectedItemIds={
-            assignmentType === 'permissions'
+            assignmentType === "permissions"
               ? roleAssignments.permissions.map((p) => p.id)
               : roleAssignments.sidebarItems.map((s) => s.id)
           }
-          onSubmit={assignmentType === 'permissions' ? handleAssignPermissions : handleAssignSidebarItems}
+          onSubmit={
+            assignmentType === "permissions" ? handleAssignPermissions : handleAssignSidebarItems
+          }
           onClose={() => setShowAssignmentModal(false)}
           isOpen={showAssignmentModal}
-          itemLabel={assignmentType === 'permissions' ? 'Permission' : 'Sidebar Item'}
+          itemLabel={assignmentType === "permissions" ? "Permission" : "Sidebar Item"}
           getItemLabel={(item) => (item as any).name || (item as any).label}
         />
       )}
@@ -409,7 +421,10 @@ function AssignmentModal({
 
         <div className="p-6 space-y-3">
           {availableItems.map((item) => (
-            <label key={item.id} className="flex items-start gap-3 p-3 rounded border border-border hover:bg-muted cursor-pointer transition-colors">
+            <label
+              key={item.id}
+              className="flex items-start gap-3 p-3 rounded border border-border hover:bg-muted cursor-pointer transition-colors"
+            >
               <input
                 type="checkbox"
                 checked={selected.has(item.id)}
@@ -439,7 +454,7 @@ function AssignmentModal({
             disabled={isSubmitting}
             className="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
-            {isSubmitting ? 'Saving...' : 'Save'}
+            {isSubmitting ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

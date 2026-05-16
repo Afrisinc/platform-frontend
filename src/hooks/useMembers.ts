@@ -17,7 +17,8 @@ export function useInviteMember(wsId: string) {
 export function useUpdateMemberRole(wsId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ memberId, role }: { memberId: string; role: Member["role"] }) => memberService.updateRole(wsId, memberId, role),
+    mutationFn: ({ memberId, role }: { memberId: string; role: Member["role"] }) =>
+      memberService.updateRole(wsId, memberId, role),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["members", wsId] }),
   });
 }

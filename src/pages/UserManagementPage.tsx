@@ -1,7 +1,15 @@
 import { useState } from "react";
 import {
-  UserPlus, Search, MoreHorizontal, X, ChevronDown,
-  ShieldCheck, Lock, UserX, RotateCcw, CheckCircle2,
+  UserPlus,
+  Search,
+  MoreHorizontal,
+  X,
+  ChevronDown,
+  ShieldCheck,
+  Lock,
+  UserX,
+  RotateCcw,
+  CheckCircle2,
 } from "lucide-react";
 import { usePlatform, TeamMember, ControlRole, ROLE_LABELS } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
@@ -15,7 +23,11 @@ function AddUserModal({ onClose }: { onClose: () => void }) {
   const { products } = usePlatform();
   const [role, setRole] = useState<ControlRole>("support_agent");
   const productRoles: ControlRole[] = [
-    "product_manager", "support_lead", "support_agent", "technical_agent", "analyst",
+    "product_manager",
+    "support_lead",
+    "support_agent",
+    "technical_agent",
+    "analyst",
   ];
   const needsProductAssignment = productRoles.includes(role);
 
@@ -27,7 +39,10 @@ function AddUserModal({ onClose }: { onClose: () => void }) {
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-border">
             <h2 className="text-base font-semibold text-foreground">Add New User</h2>
-            <button onClick={onClose} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            >
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -36,7 +51,9 @@ function AddUserModal({ onClose }: { onClose: () => void }) {
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">First Name</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  First Name
+                </label>
                 <input
                   type="text"
                   placeholder="Kwame"
@@ -44,7 +61,9 @@ function AddUserModal({ onClose }: { onClose: () => void }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">Last Name</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  Last Name
+                </label>
                 <input
                   type="text"
                   placeholder="Mensah"
@@ -71,27 +90,31 @@ function AddUserModal({ onClose }: { onClose: () => void }) {
                   className="w-full h-9 px-3 pr-8 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none"
                 >
                   {(Object.keys(ROLE_LABELS) as ControlRole[]).map((r) => (
-                    <option key={r} value={r}>{ROLE_LABELS[r]}</option>
+                    <option key={r} value={r}>
+                      {ROLE_LABELS[r]}
+                    </option>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
               </div>
               <p className="text-xs text-muted-foreground mt-1.5">
-                {role === "super_admin"   && "Full access to everything — platform-wide."}
-                {role === "ops_manager"   && "Manages team structure across all products."}
+                {role === "super_admin" && "Full access to everything — platform-wide."}
+                {role === "ops_manager" && "Manages team structure across all products."}
                 {role === "finance_admin" && "Access to billing and invoices only."}
                 {role === "product_manager" && "Full control over assigned product(s)."}
-                {role === "support_lead"  && "Supervises agents on assigned product(s)."}
+                {role === "support_lead" && "Supervises agents on assigned product(s)."}
                 {role === "support_agent" && "Handles day-to-day tickets on assigned product(s)."}
                 {role === "technical_agent" && "Technical escalation handling — API, webhooks."}
-                {role === "analyst"       && "Read-only access to reports and dashboards."}
+                {role === "analyst" && "Read-only access to reports and dashboards."}
               </p>
             </div>
 
             {/* Product assignment — only for product-scoped roles */}
             {needsProductAssignment && (
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">Assign Products</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  Assign Products
+                </label>
                 <div className="space-y-2">
                   {products.map((p) => (
                     <label key={p.id} className="flex items-center gap-2.5 cursor-pointer">
@@ -178,7 +201,7 @@ export default function UserManagementPage() {
     return matchSearch && matchRole;
   });
 
-  const activeCount   = teamMembers.filter((m) => m.status === "Active").length;
+  const activeCount = teamMembers.filter((m) => m.status === "Active").length;
   const inactiveCount = teamMembers.filter((m) => m.status === "Inactive").length;
 
   return (
@@ -214,7 +237,9 @@ export default function UserManagementPage() {
               }, {})
             ).map(([role, count]) => (
               <div key={role} className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">{ROLE_LABELS[role as ControlRole]}</span>
+                <span className="text-xs text-muted-foreground">
+                  {ROLE_LABELS[role as ControlRole]}
+                </span>
                 <span className="text-xs font-semibold text-foreground">{count}</span>
               </div>
             ))}
@@ -259,7 +284,9 @@ export default function UserManagementPage() {
             >
               <option value="All">All Roles</option>
               {(Object.keys(ROLE_LABELS) as ControlRole[]).map((r) => (
-                <option key={r} value={r}>{ROLE_LABELS[r]}</option>
+                <option key={r} value={r}>
+                  {ROLE_LABELS[r]}
+                </option>
               ))}
             </select>
             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
@@ -272,7 +299,10 @@ export default function UserManagementPage() {
             <thead>
               <tr className="bg-muted/40">
                 {["Member", "Role", "Products", "Status", "Last Login", ""].map((col) => (
-                  <th key={col} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    key={col}
+                    className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                  >
                     {col}
                   </th>
                 ))}
@@ -306,7 +336,10 @@ export default function UserManagementPage() {
                       ) : (
                         <div className="flex flex-wrap gap-1">
                           {m.productAccess.map((p) => (
-                            <span key={p} className="px-2 py-0.5 rounded-full text-xs bg-accent text-accent-foreground border border-accent-foreground/10 font-medium">
+                            <span
+                              key={p}
+                              className="px-2 py-0.5 rounded-full text-xs bg-accent text-accent-foreground border border-accent-foreground/10 font-medium"
+                            >
                               {p.charAt(0).toUpperCase() + p.slice(1)}
                             </span>
                           ))}

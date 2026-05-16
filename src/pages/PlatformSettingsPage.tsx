@@ -1,7 +1,18 @@
 import { useState } from "react";
 import {
-  Building2, Bell, Shield, Plus, ToggleLeft, ToggleRight,
-  ChevronDown, Save, Package, Settings, Clock, Globe, Loader2,
+  Building2,
+  Bell,
+  Shield,
+  Plus,
+  ToggleLeft,
+  ToggleRight,
+  ChevronDown,
+  Save,
+  Package,
+  Settings,
+  Clock,
+  Globe,
+  Loader2,
 } from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
@@ -11,9 +22,9 @@ import { createProductOnBackend } from "@/lib/platformApi";
 
 // ── Tab definitions ────────────────────────────────────────────────────────────
 const TABS = [
-  { id: "general",  label: "General",     icon: Building2 },
-  { id: "products", label: "Products",    icon: Package },
-  { id: "security", label: "Security",    icon: Shield },
+  { id: "general", label: "General", icon: Building2 },
+  { id: "products", label: "Products", icon: Package },
+  { id: "security", label: "Security", icon: Shield },
   { id: "notifications", label: "Notifications", icon: Bell },
 ];
 
@@ -43,13 +54,17 @@ function GeneralTab() {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Support Email (default)</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">
+            Support Email (default)
+          </label>
           <input
             type="email"
             defaultValue="support@afrisinc.com"
             className="w-full h-9 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
           />
-          <p className="text-xs text-muted-foreground mt-1.5">Used in outgoing support emails when no product-level email is set.</p>
+          <p className="text-xs text-muted-foreground mt-1.5">
+            Used in outgoing support emails when no product-level email is set.
+          </p>
         </div>
       </div>
 
@@ -57,7 +72,9 @@ function GeneralTab() {
         <SectionLabel>Session Settings</SectionLabel>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Inactivity Timeout</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              Inactivity Timeout
+            </label>
             <div className="relative">
               <select className="w-full h-9 px-3 pr-8 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
                 <option>8 hours (recommended)</option>
@@ -69,7 +86,9 @@ function GeneralTab() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Refresh Token Duration</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              Refresh Token Duration
+            </label>
             <div className="relative">
               <select className="w-full h-9 px-3 pr-8 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
                 <option>30 days</option>
@@ -95,12 +114,12 @@ function GeneralTab() {
 // ── Products tab ───────────────────────────────────────────────────────────────
 function ProductsTab() {
   const { products, addProduct, currentUser } = usePlatform();
-  const [showAdd,  setShowAdd]  = useState(false);
-  const [newName,  setNewName]  = useState("");
-  const [newCode,  setNewCode]  = useState("");
-  const [newDesc,  setNewDesc]  = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newCode, setNewCode] = useState("");
+  const [newDesc, setNewDesc] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [saving,   setSaving]   = useState(false);
+  const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
   async function handleSaveProduct() {
@@ -109,9 +128,10 @@ function ProductsTab() {
     setSaving(true);
     setSaveError("");
 
-    const code         = newCode.trim().toUpperCase() || name.toUpperCase().slice(0, 4);
-    const description  = newDesc.trim() || `${name} product module.`;
-    const supportEmail = newEmail.trim() || `support-${name.toLowerCase().replace(/\s+/g, "")}@afrisinc.com`;
+    const code = newCode.trim().toUpperCase() || name.toUpperCase().slice(0, 4);
+    const description = newDesc.trim() || `${name} product module.`;
+    const supportEmail =
+      newEmail.trim() || `support-${name.toLowerCase().replace(/\s+/g, "")}@afrisinc.com`;
 
     // ── Try backend persistence first (requires JWT) ─────────────────────
     let persisted = false;
@@ -127,18 +147,21 @@ function ProductsTab() {
     // ── Fall back to local-only creation ────────────────────────────────
     if (!persisted) {
       addProduct({
-        id:           name.toLowerCase().replace(/\s+/g, "-"),
+        id: name.toLowerCase().replace(/\s+/g, "-"),
         name,
         code,
         description,
-        status:       "Active",
+        status: "Active",
         supportEmail,
-        createdAt:    new Date().toISOString().split("T")[0],
+        createdAt: new Date().toISOString().split("T")[0],
       });
     }
 
     setSaving(false);
-    setNewName(""); setNewCode(""); setNewDesc(""); setNewEmail("");
+    setNewName("");
+    setNewCode("");
+    setNewDesc("");
+    setNewEmail("");
     setShowAdd(false);
   }
 
@@ -147,7 +170,8 @@ function ProductsTab() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-muted-foreground">
-            Products are modules in the platform. Adding a product requires no code changes — it is a database entry.
+            Products are modules in the platform. Adding a product requires no code changes — it is
+            a database entry.
           </p>
         </div>
         <button
@@ -170,11 +194,16 @@ function ProductsTab() {
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-semibold text-foreground">{p.name}</h3>
-                    <span className="text-xs font-mono text-muted-foreground border border-border rounded px-1.5 py-0.5">{p.code}</span>
+                    <span className="text-xs font-mono text-muted-foreground border border-border rounded px-1.5 py-0.5">
+                      {p.code}
+                    </span>
                     <StatusBadge label={p.status} variant="product" />
                   </div>
                   <p className="text-sm text-muted-foreground mt-0.5">{p.description}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Support email: <span className="font-medium text-foreground">{p.supportEmail}</span></p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Support email:{" "}
+                    <span className="font-medium text-foreground">{p.supportEmail}</span>
+                  </p>
                 </div>
               </div>
               <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors shrink-0">
@@ -191,7 +220,9 @@ function ProductsTab() {
           <SectionLabel>New Product</SectionLabel>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Display Name</label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Display Name
+              </label>
               <input
                 type="text"
                 placeholder="e.g. CRM"
@@ -201,7 +232,9 @@ function ProductsTab() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Product Code</label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Product Code
+              </label>
               <input
                 type="text"
                 placeholder="e.g. CRM"
@@ -212,7 +245,9 @@ function ProductsTab() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Short Description</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              Short Description
+            </label>
             <input
               type="text"
               placeholder="What this product does in one sentence…"
@@ -222,7 +257,9 @@ function ProductsTab() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Support Email</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              Support Email
+            </label>
             <input
               type="email"
               placeholder="support-crm@afrisinc.com"
@@ -232,11 +269,20 @@ function ProductsTab() {
             />
           </div>
           {saveError && (
-            <p className="text-xs text-destructive bg-destructive/10 border border-destructive/20 px-3 py-2 rounded-lg">{saveError}</p>
+            <p className="text-xs text-destructive bg-destructive/10 border border-destructive/20 px-3 py-2 rounded-lg">
+              {saveError}
+            </p>
           )}
           <div className="flex justify-end gap-3">
             <button
-              onClick={() => { setShowAdd(false); setNewName(""); setNewCode(""); setNewDesc(""); setNewEmail(""); setSaveError(""); }}
+              onClick={() => {
+                setShowAdd(false);
+                setNewName("");
+                setNewCode("");
+                setNewDesc("");
+                setNewEmail("");
+                setSaveError("");
+              }}
               disabled={saving}
               className="px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors disabled:opacity-50"
             >
@@ -267,18 +313,19 @@ function SecurityTab() {
       <div className="bg-card rounded-xl border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Two-Factor Authentication (2FA)</h3>
+            <h3 className="text-sm font-semibold text-foreground">
+              Two-Factor Authentication (2FA)
+            </h3>
             <p className="text-sm text-muted-foreground mt-0.5">
               Require 2FA for team members. Recommended for all admin-level roles.
             </p>
           </div>
-          <button
-            onClick={() => setTwoFAEnabled((v) => !v)}
-            className="shrink-0 transition-colors"
-          >
-            {twoFAEnabled
-              ? <ToggleRight className="h-7 w-7 text-primary" />
-              : <ToggleLeft className="h-7 w-7 text-muted-foreground" />}
+          <button onClick={() => setTwoFAEnabled((v) => !v)} className="shrink-0 transition-colors">
+            {twoFAEnabled ? (
+              <ToggleRight className="h-7 w-7 text-primary" />
+            ) : (
+              <ToggleLeft className="h-7 w-7 text-muted-foreground" />
+            )}
           </button>
         </div>
         {twoFAEnabled && (
@@ -287,7 +334,7 @@ function SecurityTab() {
             <div className="flex gap-3">
               {[
                 { value: "admins", label: "Admin roles only" },
-                { value: "all",    label: "All team members" },
+                { value: "all", label: "All team members" },
               ].map((opt) => (
                 <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -309,13 +356,14 @@ function SecurityTab() {
       <div className="bg-card rounded-xl border border-border p-6">
         <h3 className="text-sm font-semibold text-foreground mb-1">Account Lockout Policy</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          After 5 failed login attempts, accounts are locked for 15 minutes. Super Admin can unlock manually.
+          After 5 failed login attempts, accounts are locked for 15 minutes. Super Admin can unlock
+          manually.
         </p>
         <div className="bg-muted/40 rounded-lg divide-y divide-border">
           {[
             { label: "Max Failed Attempts", value: "5" },
-            { label: "Lockout Duration",    value: "15 minutes" },
-            { label: "Manual Unlock",       value: "Super Admin only" },
+            { label: "Lockout Duration", value: "15 minutes" },
+            { label: "Manual Unlock", value: "Super Admin only" },
           ].map((row) => (
             <div key={row.label} className="flex items-center justify-between px-4 py-3">
               <span className="text-xs text-muted-foreground">{row.label}</span>
@@ -331,11 +379,11 @@ function SecurityTab() {
 // ── Notifications tab ──────────────────────────────────────────────────────────
 function NotificationsTab() {
   const alerts = [
-    { label: "New user created",          desc: "Email alert when a new team member is added." },
+    { label: "New user created", desc: "Email alert when a new team member is added." },
     { label: "Failed login (5 attempts)", desc: "Alert when an account is locked." },
-    { label: "Ticket escalation",         desc: "Notify on ticket escalations." },
-    { label: "Product status change",     desc: "Alert when a product is activated or deactivated." },
-    { label: "Data export",               desc: "Alert when any user exports data." },
+    { label: "Ticket escalation", desc: "Notify on ticket escalations." },
+    { label: "Product status change", desc: "Alert when a product is activated or deactivated." },
+    { label: "Data export", desc: "Alert when any user exports data." },
   ];
 
   const [enabled, setEnabled] = useState(alerts.map(() => true));
@@ -352,9 +400,11 @@ function NotificationsTab() {
             onClick={() => setEnabled((prev) => prev.map((v, idx) => (idx === i ? !v : v)))}
             className="shrink-0 transition-colors"
           >
-            {enabled[i]
-              ? <ToggleRight className="h-6 w-6 text-primary" />
-              : <ToggleLeft className="h-6 w-6 text-muted-foreground" />}
+            {enabled[i] ? (
+              <ToggleRight className="h-6 w-6 text-primary" />
+            ) : (
+              <ToggleLeft className="h-6 w-6 text-muted-foreground" />
+            )}
           </button>
         </div>
       ))}
@@ -367,9 +417,9 @@ export default function PlatformSettingsPage() {
   const [activeTab, setActiveTab] = useState("general");
 
   const tabContent: Record<string, React.ReactNode> = {
-    general:       <GeneralTab />,
-    products:      <ProductsTab />,
-    security:      <SecurityTab />,
+    general: <GeneralTab />,
+    products: <ProductsTab />,
+    security: <SecurityTab />,
     notifications: <NotificationsTab />,
   };
 

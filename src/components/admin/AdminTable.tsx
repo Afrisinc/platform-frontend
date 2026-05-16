@@ -3,8 +3,8 @@
  * Reusable table component for admin list views
  */
 
-import React from 'react';
-import { ChevronLeft, ChevronRight, Trash2, Edit2 } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight, Trash2, Edit2 } from "lucide-react";
 
 interface Column<T> {
   key: keyof T;
@@ -27,7 +27,7 @@ interface AdminTableProps<T> {
 
 export function AdminTable<T extends { id: string }>({
   columns,
-  data,
+  data = [],
   loading = false,
   onEdit,
   onDelete,
@@ -50,13 +50,18 @@ export function AdminTable<T extends { id: string }>({
                 {column.label}
               </th>
             ))}
-            {(onEdit || onDelete) && <th className="px-6 py-3 text-right text-sm font-semibold">Actions</th>}
+            {(onEdit || onDelete) && (
+              <th className="px-6 py-3 text-right text-sm font-semibold">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={columns.length + (onEdit || onDelete ? 1 : 0)} className="px-6 py-4 text-center">
+              <td
+                colSpan={columns.length + (onEdit || onDelete ? 1 : 0)}
+                className="px-6 py-4 text-center"
+              >
                 <div className="flex items-center justify-center">
                   <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                 </div>
@@ -64,16 +69,24 @@ export function AdminTable<T extends { id: string }>({
             </tr>
           ) : data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length + (onEdit || onDelete ? 1 : 0)} className="px-6 py-8 text-center text-sm text-muted-foreground">
+              <td
+                colSpan={columns.length + (onEdit || onDelete ? 1 : 0)}
+                className="px-6 py-8 text-center text-sm text-muted-foreground"
+              >
                 No items found
               </td>
             </tr>
           ) : (
             data.map((item) => (
-              <tr key={keyExtractor(item)} className="border-b border-border hover:bg-muted/50 transition-colors">
+              <tr
+                key={keyExtractor(item)}
+                className="border-b border-border hover:bg-muted/50 transition-colors"
+              >
                 {columns.map((column) => (
                   <td key={String(column.key)} className="px-6 py-4 text-sm text-foreground">
-                    {column.render ? column.render(item[column.key], item) : String(item[column.key] || '-')}
+                    {column.render
+                      ? column.render(item[column.key], item)
+                      : String(item[column.key] || "-")}
                   </td>
                 ))}
                 {(onEdit || onDelete) && (
@@ -109,7 +122,9 @@ export function AdminTable<T extends { id: string }>({
       {/* Pagination */}
       {totalPages > 1 && onPageChange && (
         <div className="flex items-center justify-between border-t border-border px-6 py-4 bg-muted/50">
-          <p className="text-sm text-muted-foreground">Page {page} of {totalPages}</p>
+          <p className="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+          </p>
           <div className="flex gap-2">
             <button
               onClick={() => onPageChange(page - 1)}

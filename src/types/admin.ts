@@ -231,6 +231,108 @@ export interface ApiSuccessResponse<T> {
 
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
+// ──── Admin User Types ──────────────────────────────────────────────────────
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  status: "ACTIVE" | "INACTIVE" | "DORMANT" | "CLOSED" | "SUSPENDED";
+  createdAt: string;
+  lastLogin?: string | null;
+}
+
+export interface AdminUsersResponse {
+  success: boolean;
+  resp_code: number;
+  resp_msg: string;
+  data: {
+    users: AdminUser[];
+    total: number;
+    page: number;
+    pages: number;
+  };
+}
+
+// ──── Org Member Types ──────────────────────────────────────────────────────
+
+export interface OrgMember {
+  id: string;
+  organizationId: string;
+  userId: string;
+  roleId?: string;
+  user: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
+  role?: {
+    id: string;
+    name: string;
+  };
+  createdAt: string;
+}
+
+// ──── Admin Product Types ───────────────────────────────────────────────────
+
+export interface AdminProduct {
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+  status: string;
+  baseUrl?: string;
+  allowedCallbacks?: string[];
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProductEnrollmentStat {
+  productId: string;
+  productName: string;
+  productCode: string;
+  totalEnrollments: number;
+  active: number;
+  suspended: number;
+  plans: { FREE: number; PRO: number; ENTERPRISE: number };
+}
+
+export interface CreateProductPayload {
+  name: string;
+  code: string;
+  description?: string;
+  baseUrl?: string;
+  status?: string;
+}
+
+export interface UpdateProductPayload {
+  name?: string;
+  description?: string;
+  baseUrl?: string;
+  status?: string;
+}
+
+export interface ProductAccount {
+  id: string;
+  type: string;
+  owner_user_id: string;
+  owner: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
+  enrollment: {
+    enrollmentId: string;
+    status: string;
+    plan: string;
+    enrolledAt: string;
+  };
+}
+
 // ──── Admin Dashboard Types ─────────────────────────────────────────────────
 
 export interface AdminDashboardStats {
@@ -265,7 +367,7 @@ export interface TableState {
   total: number;
   search?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface TableResponse<T> {
@@ -277,7 +379,7 @@ export interface TableResponse<T> {
 
 // ──── Operation Status Types ────────────────────────────────────────────────
 
-export type OperationStatus = 'idle' | 'loading' | 'success' | 'error';
+export type OperationStatus = "idle" | "loading" | "success" | "error";
 
 export interface OperationResult {
   status: OperationStatus;

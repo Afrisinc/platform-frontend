@@ -3,7 +3,7 @@
  * Handles all admin-level API operations: roles, permissions, sidebar items
  */
 
-import { API_BASE } from './api';
+import { API_BASE } from "./api";
 import type {
   Role,
   Permission,
@@ -21,7 +21,7 @@ import type {
   SidebarItemsListResponse,
   RolePermissionsResponse,
   RoleSidebarItemsResponse,
-} from '@/types/admin';
+} from "@/types/admin";
 
 const ADMIN_BASE = `${API_BASE}/api/admin`;
 
@@ -33,12 +33,12 @@ async function adminFetch<T>(
   token: string
 ): Promise<T> {
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(options.headers || {}),
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${ADMIN_BASE}${endpoint}`, {
@@ -64,11 +64,7 @@ export async function fetchRoles(
   page: number = 1,
   limit: number = 50
 ): Promise<RolesListResponse> {
-  return adminFetch(
-    `/roles?page=${page}&limit=${limit}`,
-    { method: 'GET' },
-    token
-  );
+  return adminFetch(`/roles?page=${page}&limit=${limit}`, { method: "GET" }, token);
 }
 
 /**
@@ -78,7 +74,7 @@ export async function fetchRole(
   token: string,
   roleId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Role }> {
-  return adminFetch(`/roles/${roleId}`, { method: 'GET' }, token);
+  return adminFetch(`/roles/${roleId}`, { method: "GET" }, token);
 }
 
 /**
@@ -88,7 +84,7 @@ export async function createRole(
   token: string,
   data: CreateRoleRequest
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Role }> {
-  return adminFetch('/roles', { method: 'POST', body: JSON.stringify(data) }, token);
+  return adminFetch("/roles", { method: "POST", body: JSON.stringify(data) }, token);
 }
 
 /**
@@ -99,14 +95,17 @@ export async function updateRole(
   roleId: string,
   data: UpdateRoleRequest
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Role }> {
-  return adminFetch(`/roles/${roleId}`, { method: 'PUT', body: JSON.stringify(data) }, token);
+  return adminFetch(`/roles/${roleId}`, { method: "PUT", body: JSON.stringify(data) }, token);
 }
 
 /**
  * Delete role
  */
-export async function deleteRole(token: string, roleId: string): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(`/roles/${roleId}`, { method: 'DELETE' }, token);
+export async function deleteRole(
+  token: string,
+  roleId: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
+  return adminFetch(`/roles/${roleId}`, { method: "DELETE" }, token);
 }
 
 // ──── PERMISSION MANAGEMENT ─────────────────────────────────────────────────
@@ -124,7 +123,7 @@ export async function fetchPermissions(
   if (category) {
     url += `&category=${encodeURIComponent(category)}`;
   }
-  return adminFetch(url, { method: 'GET' }, token);
+  return adminFetch(url, { method: "GET" }, token);
 }
 
 /**
@@ -134,7 +133,7 @@ export async function fetchPermission(
   token: string,
   permissionId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Permission }> {
-  return adminFetch(`/permissions/${permissionId}`, { method: 'GET' }, token);
+  return adminFetch(`/permissions/${permissionId}`, { method: "GET" }, token);
 }
 
 /**
@@ -144,7 +143,7 @@ export async function createPermission(
   token: string,
   data: CreatePermissionRequest
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Permission }> {
-  return adminFetch('/permissions', { method: 'POST', body: JSON.stringify(data) }, token);
+  return adminFetch("/permissions", { method: "POST", body: JSON.stringify(data) }, token);
 }
 
 /**
@@ -157,7 +156,7 @@ export async function updatePermission(
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: Permission }> {
   return adminFetch(
     `/permissions/${permissionId}`,
-    { method: 'PUT', body: JSON.stringify(data) },
+    { method: "PUT", body: JSON.stringify(data) },
     token
   );
 }
@@ -169,7 +168,7 @@ export async function deletePermission(
   token: string,
   permissionId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(`/permissions/${permissionId}`, { method: 'DELETE' }, token);
+  return adminFetch(`/permissions/${permissionId}`, { method: "DELETE" }, token);
 }
 
 // ──── ROLE-PERMISSION ASSIGNMENT ────────────────────────────────────────────
@@ -181,7 +180,7 @@ export async function fetchRolePermissions(
   token: string,
   roleId: string
 ): Promise<RolePermissionsResponse> {
-  return adminFetch(`/roles/${roleId}/permissions`, { method: 'GET' }, token);
+  return adminFetch(`/roles/${roleId}/permissions`, { method: "GET" }, token);
 }
 
 /**
@@ -194,7 +193,7 @@ export async function assignPermissionsToRole(
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
   return adminFetch(
     `/roles/${roleId}/permissions`,
-    { method: 'POST', body: JSON.stringify(data) },
+    { method: "POST", body: JSON.stringify(data) },
     token
   );
 }
@@ -207,11 +206,7 @@ export async function addPermissionToRole(
   roleId: string,
   permissionId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(
-    `/roles/${roleId}/permissions/${permissionId}`,
-    { method: 'POST' },
-    token
-  );
+  return adminFetch(`/roles/${roleId}/permissions/${permissionId}`, { method: "POST" }, token);
 }
 
 /**
@@ -222,11 +217,7 @@ export async function removePermissionFromRole(
   roleId: string,
   permissionId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(
-    `/roles/${roleId}/permissions/${permissionId}`,
-    { method: 'DELETE' },
-    token
-  );
+  return adminFetch(`/roles/${roleId}/permissions/${permissionId}`, { method: "DELETE" }, token);
 }
 
 // ──── SIDEBAR ITEM MANAGEMENT ────────────────────────────────────────────────
@@ -244,7 +235,7 @@ export async function fetchSidebarItems(
   if (parentId) {
     url += `&parentId=${encodeURIComponent(parentId)}`;
   }
-  return adminFetch(url, { method: 'GET' }, token);
+  return adminFetch(url, { method: "GET" }, token);
 }
 
 /**
@@ -254,7 +245,7 @@ export async function fetchSidebarItem(
   token: string,
   itemId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: SidebarItem }> {
-  return adminFetch(`/sidebar-items/${itemId}`, { method: 'GET' }, token);
+  return adminFetch(`/sidebar-items/${itemId}`, { method: "GET" }, token);
 }
 
 /**
@@ -264,7 +255,7 @@ export async function createSidebarItem(
   token: string,
   data: CreateSidebarItemRequest
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: SidebarItem }> {
-  return adminFetch('/sidebar-items', { method: 'POST', body: JSON.stringify(data) }, token);
+  return adminFetch("/sidebar-items", { method: "POST", body: JSON.stringify(data) }, token);
 }
 
 /**
@@ -277,7 +268,7 @@ export async function updateSidebarItem(
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: SidebarItem }> {
   return adminFetch(
     `/sidebar-items/${itemId}`,
-    { method: 'PUT', body: JSON.stringify(data) },
+    { method: "PUT", body: JSON.stringify(data) },
     token
   );
 }
@@ -289,7 +280,7 @@ export async function deleteSidebarItem(
   token: string,
   itemId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(`/sidebar-items/${itemId}`, { method: 'DELETE' }, token);
+  return adminFetch(`/sidebar-items/${itemId}`, { method: "DELETE" }, token);
 }
 
 // ──── ROLE-SIDEBAR ASSIGNMENT ────────────────────────────────────────────────
@@ -301,7 +292,7 @@ export async function fetchRoleSidebarItems(
   token: string,
   roleId: string
 ): Promise<RoleSidebarItemsResponse> {
-  return adminFetch(`/roles/${roleId}/sidebar-items`, { method: 'GET' }, token);
+  return adminFetch(`/roles/${roleId}/sidebar-items`, { method: "GET" }, token);
 }
 
 /**
@@ -314,7 +305,7 @@ export async function assignSidebarItemsToRole(
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
   return adminFetch(
     `/roles/${roleId}/sidebar-items`,
-    { method: 'POST', body: JSON.stringify(data) },
+    { method: "POST", body: JSON.stringify(data) },
     token
   );
 }
@@ -327,11 +318,7 @@ export async function addSidebarItemToRole(
   roleId: string,
   itemId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
-  return adminFetch(
-    `/roles/${roleId}/sidebar-items/${itemId}`,
-    { method: 'POST' },
-    token
-  );
+  return adminFetch(`/roles/${roleId}/sidebar-items/${itemId}`, { method: "POST" }, token);
 }
 
 /**
@@ -342,9 +329,122 @@ export async function removeSidebarItemFromRole(
   roleId: string,
   itemId: string
 ): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
+  return adminFetch(`/roles/${roleId}/sidebar-items/${itemId}`, { method: "DELETE" }, token);
+}
+
+// ──── PLATFORM USERS (admin) ─────────────────────────────────────────────────
+
+export async function fetchAdminUsers(
+  token: string,
+  page = 1,
+  limit = 50,
+  search?: string,
+  status?: string
+): Promise<{
+  success: boolean;
+  resp_code: number;
+  resp_msg: string;
+  data: { users: any[]; total: number; page: number; pages: number };
+}> {
+  let url = `/users?page=${page}&limit=${limit}`;
+  if (search) url += `&search=${encodeURIComponent(search)}`;
+  if (status) url += `&status=${encodeURIComponent(status)}`;
+  return adminFetch(url, { method: "GET" }, token);
+}
+
+export async function updateAdminUserStatus(
+  token: string,
+  userId: string,
+  status: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any }> {
   return adminFetch(
-    `/roles/${roleId}/sidebar-items/${itemId}`,
-    { method: 'DELETE' },
+    `/users/${userId}/status`,
+    { method: "PUT", body: JSON.stringify({ status }) },
     token
   );
+}
+
+// ──── ORGANIZATIONS (admin) ──────────────────────────────────────────────────
+
+export async function fetchAdminOrganizations(
+  token: string,
+  page = 1,
+  limit = 50,
+  search?: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any[] }> {
+  let url = `/organizations?page=${page}&limit=${limit}`;
+  if (search) url += `&search=${encodeURIComponent(search)}`;
+  return adminFetch(url, { method: "GET" }, token);
+}
+
+export async function fetchOrgMembers(
+  token: string,
+  orgId: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any[] }> {
+  return adminFetch(`/organizations/${orgId}/members`, { method: "GET" }, token);
+}
+
+export async function addOrgMember(
+  token: string,
+  orgId: string,
+  payload: { userId: string; roleId: string }
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any }> {
+  return adminFetch(
+    `/organizations/${orgId}/members`,
+    { method: "POST", body: JSON.stringify(payload) },
+    token
+  );
+}
+
+export async function removeOrgMember(
+  token: string,
+  orgId: string,
+  userId: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string }> {
+  return adminFetch(`/organizations/${orgId}/members/${userId}`, { method: "DELETE" }, token);
+}
+
+// ──── PRODUCTS (admin) ───────────────────────────────────────────────────────
+
+export async function fetchAdminProducts(
+  token: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any[] }> {
+  return adminFetch("/products", { method: "GET" }, token);
+}
+
+export async function createAdminProduct(
+  token: string,
+  payload: { name: string; code: string; description?: string; baseUrl?: string; status?: string }
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any }> {
+  return adminFetch("/products", { method: "POST", body: JSON.stringify(payload) }, token);
+}
+
+export async function updateAdminProduct(
+  token: string,
+  productId: string,
+  payload: { name?: string; description?: string; baseUrl?: string; status?: string }
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any }> {
+  return adminFetch(
+    `/products/${productId}`,
+    { method: "PUT", body: JSON.stringify(payload) },
+    token
+  );
+}
+
+export async function fetchAdminProductEnrollments(
+  token: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any[] }> {
+  return adminFetch("/products/enrollments", { method: "GET" }, token);
+}
+
+export async function fetchAdminProductAccounts(
+  token: string,
+  productId: string,
+  page = 1,
+  limit = 50,
+  status?: string
+): Promise<{ success: boolean; resp_code: number; resp_msg: string; data: any }> {
+  let url = `/products/${productId}/accounts?page=${page}&limit=${limit}`;
+  if (status) url += `&status=${encodeURIComponent(status)}`;
+  return adminFetch(url, { method: "GET" }, token);
 }

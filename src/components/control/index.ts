@@ -12,9 +12,9 @@
  *   SectionLabel — Uppercase tracking label for grouping content
  *   UserAvatar   — Circular avatar with 2-letter initials
  */
-export { PageHeader }   from "./PageHeader";
-export { StatCard }     from "./StatCard";
-export { StatusBadge }  from "./StatusBadge";
-export { EmptyState }   from "./EmptyState";
+export { PageHeader } from "./PageHeader";
+export { StatCard } from "./StatCard";
+export { StatusBadge } from "./StatusBadge";
+export { EmptyState } from "./EmptyState";
 export { SectionLabel } from "./SectionLabel";
-export { UserAvatar }   from "./UserAvatar";
+export { UserAvatar } from "./UserAvatar";

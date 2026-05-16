@@ -21,7 +21,8 @@ export function useCreateWorkspace() {
 export function useUpdateWorkspace() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Workspace> }) => workspaceService.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<Workspace> }) =>
+      workspaceService.update(id, data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["workspaces"] }),
   });
 }

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { TopNavBar } from "./TopNavBar";
 import { AppSidebar } from "./AppSidebar";
 import { AdminGuard } from "./admin/AdminGuard";
@@ -12,13 +14,65 @@ import PlatformSettingsPage from "@/pages/PlatformSettingsPage";
 import ProductModule from "@/pages/products/ProductModule";
 import BillingPage from "@/pages/BillingPage";
 import SettingsPage from "@/pages/SettingsPage";
+import MembersPage from "@/pages/MembersPage";
 import RoleManagementPage from "@/pages/admin/RoleManagementPage";
 import PermissionManagementPage from "@/pages/admin/PermissionManagementPage";
 import SidebarManagementPage from "@/pages/admin/SidebarManagementPage";
+import SuperAdminDashboard from "@/pages/admin/SuperAdminDashboard";
 
-// ── Page routing (no URL changes — client-side active-page state) ─────────────
+// ── Page routing ──────────────────────────────────────────────────────────────
 function PageRenderer() {
-  const { activePage, activeProductId, currentUser, can, hasProductAccess } = usePlatform();
+  const location = useLocation();
+  const { activePage, setActivePage, activeProductId, currentUser, can, hasProductAccess } =
+    usePlatform();
+
+  // Sync URL to activePage: when URL changes (direct visit, browser back/forward), update activePage
+  useEffect(() => {
+    const pathname = location.pathname;
+
+    // Root path → dashboard
+    if (pathname === "/") {
+      setActivePage("dashboard");
+      return;
+    }
+
+    // Product path: /product/:id → product page with activeProductId
+    const productMatch = pathname.match(/^\/product\/([a-zA-Z0-9-]+)$/);
+    if (productMatch) {
+      setActivePage("product");
+      return;
+    }
+
+    // Convert pathname to pageId by removing leading slash
+    // e.g., "/organization/members" → "organization/members" → look up in PATH_MAP
+    const cleanPath = pathname.replace(/^\//, "").toLowerCase();
+
+    // Create reverse PATH_MAP for URL → pageId lookup
+    const PATH_TO_PAGE_ID: Record<string, string> = {
+      dashboard: "dashboard",
+      "organization/members": "organization-members",
+      "organization-members": "organization-members",
+      "organization/info": "organization-info",
+      "organization-info": "organization-info",
+      customers: "customers",
+      tickets: "tickets",
+      reports: "reports",
+      "user-management": "user-management",
+      billing: "billing",
+      "audit-log": "audit-log",
+      "platform-settings": "platform-settings",
+      settings: "settings",
+      "admin-control": "admin-control",
+      "admin-roles": "admin-roles",
+      "admin-permissions": "admin-permissions",
+      "admin-sidebar": "admin-sidebar",
+    };
+
+    const pageId = PATH_TO_PAGE_ID[cleanPath] || cleanPath;
+    if (activePage !== pageId) {
+      setActivePage(pageId);
+    }
+  }, [location.pathname, activePage, setActivePage]);
 
   // Guard: if user tries to access a page they have no permission for, fall back to dashboard
   function guard(page: React.ReactNode, check: boolean): React.ReactNode {
@@ -31,21 +85,28 @@ function PageRenderer() {
   }
 
   const pages: Record<string, React.ReactNode> = {
-    dashboard:           <Dashboard />,
+    dashboard: <Dashboard />,
     // "product" is the shared route for any product sidebar item
-    product:             guard(<ProductModule />,          hasProductAccess(activeProductId)),
-    customers:           guard(<CustomersPage />,          can("view_customers")),
-    tickets:             guard(<SupportTicketsPage />,     can("view_tickets")),
-    reports:             guard(<ReportsPage />,            can("view_reports")),
-    "user-management":   guard(<UserManagementPage />,     can("manage_users")),
-    billing:             guard(<BillingPage />,            can("view_billing")),
-    "audit-log":         guard(<AuditLogPage />,           can("view_audit")),
-    "platform-settings": guard(<PlatformSettingsPage />,   currentUser.role === "super_admin"),
-    settings:            guard(<SettingsPage />,           can("configure_product")),
+    product: guard(<ProductModule />, hasProductAccess(activeProductId)),
+    customers: guard(<CustomersPage />, can("view_customers")),
+    tickets: guard(<SupportTicketsPage />, can("view_tickets")),
+    reports: guard(<ReportsPage />, can("view_reports")),
+    "user-management": guard(<UserManagementPage />, can("manage_users")),
+    billing: guard(<BillingPage />, can("view_billing")),
+    "audit-log": guard(<AuditLogPage />, can("view_audit")),
+    "platform-settings": guard(<PlatformSettingsPage />, currentUser.role === "super_admin"),
+    settings: guard(<SettingsPage />, can("configure_product")),
+    "organization-info": guard(<SettingsPage />, can("configure_product")),
+    organization: guard(<SettingsPage />, can("configure_product")),
+    "organization-members": guard(<MembersPage />, can("manage_users")),
     // Admin pages
-    "admin-roles":       adminGuard(<RoleManagementPage />, currentUser.role === "super_admin"),
-    "admin-permissions": adminGuard(<PermissionManagementPage />, currentUser.role === "super_admin"),
-    "admin-sidebar":     adminGuard(<SidebarManagementPage />, currentUser.role === "super_admin"),
+    "admin-control": adminGuard(<SuperAdminDashboard />, currentUser.role === "super_admin"),
+    "admin-roles": adminGuard(<RoleManagementPage />, currentUser.role === "super_admin"),
+    "admin-permissions": adminGuard(
+      <PermissionManagementPage />,
+      currentUser.role === "super_admin"
+    ),
+    "admin-sidebar": adminGuard(<SidebarManagementPage />, currentUser.role === "super_admin"),
   };
 
   return <>{pages[activePage] ?? <Dashboard />}</>;

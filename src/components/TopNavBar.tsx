@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search, Bell, ChevronDown, LogOut, User } from "lucide-react";
-import { usePlatform, ROLE_LABELS, clearSession } from "@/contexts/PlatformContext";
+import { usePlatform, ROLE_LABELS } from "@/contexts/PlatformContext";
+import { authService } from "@/services/authService";
 import { UserAvatar } from "@/components/control/UserAvatar";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -9,22 +10,19 @@ export function TopNavBar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   function handleSignOut() {
-    clearSession();
-    // Full page redirect so PlatformProvider reinitialises cleanly on next login
-    window.location.href = "/login";
+    authService.redirectToAuthUI();
   }
 
   return (
     <header className="h-14 border-b border-border bg-card flex items-center px-4 gap-3 shrink-0 z-30">
-
       {/* ── Brand ─────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2.5 mr-2 shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
-          <span className="text-primary-foreground font-bold text-sm leading-none">A</span>
-        </div>
+        <img src="/afrisic-logo.png" alt="Afrisinc Logo" className="w-8 h-8 rounded-lg shadow-sm" />
         <div className="hidden sm:flex flex-col leading-none">
           <span className="font-bold text-sm tracking-tight text-foreground">Afrisinc</span>
-          <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">Control</span>
+          <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">
+            Control
+          </span>
         </div>
       </div>
 
@@ -74,7 +72,9 @@ export function TopNavBar() {
           <UserAvatar initials={currentUser.avatar} size="sm" />
           <div className="hidden sm:flex flex-col items-start leading-tight">
             <span className="text-xs font-semibold text-foreground">{currentUser.name}</span>
-            <span className="text-[10px] text-muted-foreground">{ROLE_LABELS[currentUser.role]}</span>
+            <span className="text-[10px] text-muted-foreground">
+              {ROLE_LABELS[currentUser.role]}
+            </span>
           </div>
           <ChevronDown className="h-3 w-3 text-muted-foreground hidden sm:block" />
         </button>
@@ -86,13 +86,14 @@ export function TopNavBar() {
 
             {/* Dropdown */}
             <div className="absolute right-0 top-full mt-1 z-50 w-64 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
-
               {/* User info */}
               <div className="px-4 py-3 border-b border-border">
                 <div className="flex items-center gap-3">
                   <UserAvatar initials={currentUser.avatar} size="md" />
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground truncate">{currentUser.name}</p>
+                    <p className="text-sm font-semibold text-foreground truncate">
+                      {currentUser.name}
+                    </p>
                     <p className="text-xs text-muted-foreground truncate">{currentUser.email}</p>
                   </div>
                 </div>

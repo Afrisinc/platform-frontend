@@ -1,7 +1,26 @@
-import { BarChart3, TrendingUp, Users, Ticket, Download, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, AreaChart, Area, Legend,
+  BarChart3,
+  TrendingUp,
+  Users,
+  Ticket,
+  Download,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  Legend,
 } from "recharts";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
@@ -28,17 +47,17 @@ const notifyDeliveryData = [
 ];
 
 const resolutionData = [
-  { label: "< 1 hour",  value: 3 },
+  { label: "< 1 hour", value: 3 },
   { label: "1–4 hours", value: 8 },
-  { label: "4–24 hours",value: 5 },
-  { label: "1–3 days",  value: 4 },
-  { label: "> 3 days",  value: 1 },
+  { label: "4–24 hours", value: 5 },
+  { label: "1–3 days", value: 4 },
+  { label: "> 3 days", value: 1 },
 ];
 
 const agentPerformance = [
-  { name: "Fatou Diallo",   handled: 12, escalated: 1, avgHours: 3.2, satisfaction: 4.8 },
-  { name: "Abena Boateng",  handled: 18, escalated: 2, avgHours: 2.1, satisfaction: 4.9 },
-  { name: "Kwame Asante",   handled: 7,  escalated: 0, avgHours: 5.4, satisfaction: 4.7 },
+  { name: "Fatou Diallo", handled: 12, escalated: 1, avgHours: 3.2, satisfaction: 4.8 },
+  { name: "Abena Boateng", handled: 18, escalated: 2, avgHours: 2.1, satisfaction: 4.9 },
+  { name: "Kwame Asante", handled: 7, escalated: 0, avgHours: 5.4, satisfaction: 4.7 },
 ];
 
 // ── Tooltip style ─────────────────────────────────────────────────────────────
@@ -72,10 +91,41 @@ export default function ReportsPage() {
 
       {/* Top-level stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Customers"   value={customers.length}                                             icon={Users}        changeType="positive" change="+3 this month"       iconBg="bg-primary/10"    iconColor="text-primary" />
-        <StatCard label="Tickets This Week" value={tickets.length}                                               icon={Ticket}       changeType="neutral"  change="All statuses"       iconBg="bg-warning/10"    iconColor="text-warning" />
-        <StatCard label="Avg. Resolution"   value="3.2h"                                                         icon={Clock}        changeType="positive" change="↓ 0.8h vs last wk"  iconBg="bg-success/10"    iconColor="text-success" />
-        <StatCard label="Escalation Rate"   value={`${Math.round((tickets.filter(t => t.status === "Escalated").length / tickets.length) * 100)}%`} icon={AlertCircle} changeType="neutral" iconBg="bg-muted" iconColor="text-muted-foreground" />
+        <StatCard
+          label="Total Customers"
+          value={customers.length}
+          icon={Users}
+          changeType="positive"
+          change="+3 this month"
+          iconBg="bg-primary/10"
+          iconColor="text-primary"
+        />
+        <StatCard
+          label="Tickets This Week"
+          value={tickets.length}
+          icon={Ticket}
+          changeType="neutral"
+          change="All statuses"
+          iconBg="bg-warning/10"
+          iconColor="text-warning"
+        />
+        <StatCard
+          label="Avg. Resolution"
+          value="3.2h"
+          icon={Clock}
+          changeType="positive"
+          change="↓ 0.8h vs last wk"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
+        <StatCard
+          label="Escalation Rate"
+          value={`${Math.round((tickets.filter((t) => t.status === "Escalated").length / tickets.length) * 100)}%`}
+          icon={AlertCircle}
+          changeType="neutral"
+          iconBg="bg-muted"
+          iconColor="text-muted-foreground"
+        />
       </div>
 
       {/* Ticket volume chart */}
@@ -89,12 +139,33 @@ export default function ReportsPage() {
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={ticketVolumeData} barGap={4}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+            <XAxis
+              dataKey="day"
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+              axisLine={false}
+              tickLine={false}
+            />
             <Tooltip {...TooltipStyle} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar dataKey="opened"   name="Opened"   fill="hsl(var(--warning))"  radius={[4, 4, 0, 0]} opacity={0.85} />
-            <Bar dataKey="resolved" name="Resolved" fill="hsl(var(--success))"  radius={[4, 4, 0, 0]} opacity={0.85} />
+            <Bar
+              dataKey="opened"
+              name="Opened"
+              fill="hsl(var(--warning))"
+              radius={[4, 4, 0, 0]}
+              opacity={0.85}
+            />
+            <Bar
+              dataKey="resolved"
+              name="Resolved"
+              fill="hsl(var(--success))"
+              radius={[4, 4, 0, 0]}
+              opacity={0.85}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -103,32 +174,69 @@ export default function ReportsPage() {
       <div className="bg-card rounded-xl border border-border p-6">
         <div className="mb-6">
           <SectionLabel>Notify — Delivery Success Rate (%)</SectionLabel>
-          <p className="text-xs text-muted-foreground mt-0.5">Email, SMS and push channels by month</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Email, SMS and push channels by month
+          </p>
         </div>
         <ResponsiveContainer width="100%" height={240}>
           <AreaChart data={notifyDeliveryData}>
             <defs>
               <linearGradient id="emailGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="smsGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="hsl(var(--success))" stopOpacity={0.3} />
+                <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="pushGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="hsl(var(--warning))" stopOpacity={0.3} />
+                <stop offset="5%" stopColor="hsl(var(--warning))" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="hsl(var(--warning))" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-            <XAxis dataKey="month" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-            <YAxis domain={[70, 100]} tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} unit="%" />
+            <XAxis
+              dataKey="month"
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              domain={[70, 100]}
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+              axisLine={false}
+              tickLine={false}
+              unit="%"
+            />
             <Tooltip {...TooltipStyle} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Area type="monotone" dataKey="email" name="Email" stroke="hsl(var(--primary))" fill="url(#emailGrad)" strokeWidth={2} dot={false} />
-            <Area type="monotone" dataKey="sms"   name="SMS"   stroke="hsl(var(--success))" fill="url(#smsGrad)"  strokeWidth={2} dot={false} />
-            <Area type="monotone" dataKey="push"  name="Push"  stroke="hsl(var(--warning))" fill="url(#pushGrad)" strokeWidth={2} dot={false} />
+            <Area
+              type="monotone"
+              dataKey="email"
+              name="Email"
+              stroke="hsl(var(--primary))"
+              fill="url(#emailGrad)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <Area
+              type="monotone"
+              dataKey="sms"
+              name="SMS"
+              stroke="hsl(var(--success))"
+              fill="url(#smsGrad)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <Area
+              type="monotone"
+              dataKey="push"
+              name="Push"
+              stroke="hsl(var(--warning))"
+              fill="url(#pushGrad)"
+              strokeWidth={2}
+              dot={false}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -137,14 +245,34 @@ export default function ReportsPage() {
         {/* Resolution time */}
         <div className="bg-card rounded-xl border border-border p-6">
           <SectionLabel className="mb-1">Resolution Time Distribution</SectionLabel>
-          <p className="text-xs text-muted-foreground mb-5">Number of tickets resolved in each time band</p>
+          <p className="text-xs text-muted-foreground mb-5">
+            Number of tickets resolved in each time band
+          </p>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={resolutionData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-              <YAxis dataKey="label" type="category" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={80} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="label"
+                type="category"
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                axisLine={false}
+                tickLine={false}
+                width={80}
+              />
               <Tooltip {...TooltipStyle} />
-              <Bar dataKey="value" name="Tickets" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} opacity={0.85} />
+              <Bar
+                dataKey="value"
+                name="Tickets"
+                fill="hsl(var(--primary))"
+                radius={[0, 4, 4, 0]}
+                opacity={0.85}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -155,7 +283,12 @@ export default function ReportsPage() {
           <div className="space-y-4">
             {agentPerformance.map((agent) => (
               <div key={agent.name} className="flex items-start gap-3">
-                <UserAvatar initials={agent.name.split(" ").map((n) => n[0]).join("")} />
+                <UserAvatar
+                  initials={agent.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-sm font-medium text-foreground">{agent.name}</p>
@@ -185,14 +318,39 @@ export default function ReportsPage() {
       {/* Customer health */}
       <div className="bg-card rounded-xl border border-border p-6">
         <SectionLabel className="mb-1">Customer Health</SectionLabel>
-        <p className="text-xs text-muted-foreground mb-4">Accounts with repeated issues, low activity, or at risk</p>
+        <p className="text-xs text-muted-foreground mb-4">
+          Accounts with repeated issues, low activity, or at risk
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { label: "Healthy",     count: customers.filter((c) => c.status === "Active" && (c.apiUsage ?? 0) > 1000).length,  color: "text-success",     bg: "bg-success/10",     desc: "Active, good API usage" },
-            { label: "At Risk",     count: customers.filter((c) => c.status === "Active" && (c.apiUsage ?? 0) < 500).length,   color: "text-warning",     bg: "bg-warning/10",     desc: "Low recent activity" },
-            { label: "Suspended",   count: customers.filter((c) => c.status === "Suspended").length,                           color: "text-destructive", bg: "bg-destructive/10", desc: "Account suspended" },
+            {
+              label: "Healthy",
+              count: customers.filter((c) => c.status === "Active" && (c.apiUsage ?? 0) > 1000)
+                .length,
+              color: "text-success",
+              bg: "bg-success/10",
+              desc: "Active, good API usage",
+            },
+            {
+              label: "At Risk",
+              count: customers.filter((c) => c.status === "Active" && (c.apiUsage ?? 0) < 500)
+                .length,
+              color: "text-warning",
+              bg: "bg-warning/10",
+              desc: "Low recent activity",
+            },
+            {
+              label: "Suspended",
+              count: customers.filter((c) => c.status === "Suspended").length,
+              color: "text-destructive",
+              bg: "bg-destructive/10",
+              desc: "Account suspended",
+            },
           ].map((item) => (
-            <div key={item.label} className={`rounded-lg px-4 py-4 ${item.bg} border border-current/10`}>
+            <div
+              key={item.label}
+              className={`rounded-lg px-4 py-4 ${item.bg} border border-current/10`}
+            >
               <p className={`text-2xl font-bold ${item.color}`}>{item.count}</p>
               <p className={`text-sm font-semibold ${item.color} mt-0.5`}>{item.label}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>

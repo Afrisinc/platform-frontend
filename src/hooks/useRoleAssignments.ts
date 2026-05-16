@@ -3,8 +3,8 @@
  * Custom hook for managing role-permission and role-sidebar assignments
  */
 
-import { useState, useCallback } from 'react';
-import type { Permission, SidebarItem } from '@/types/admin';
+import { useState, useCallback } from "react";
+import type { Permission, SidebarItem } from "@/types/admin";
 import {
   fetchRolePermissions,
   assignPermissionsToRole,
@@ -14,7 +14,7 @@ import {
   assignSidebarItemsToRole,
   addSidebarItemToRole,
   removeSidebarItemFromRole,
-} from '@/lib/platformAdminApi';
+} from "@/lib/platformAdminApi";
 
 interface UseRoleAssignmentsState {
   permissions: Permission[];
@@ -44,7 +44,7 @@ export function useRoleAssignments(token: string, roleId: string) {
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to load permissions',
+        error: error instanceof Error ? error.message : "Failed to load permissions",
         loading: false,
       }));
     }
@@ -63,7 +63,7 @@ export function useRoleAssignments(token: string, roleId: string) {
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to load sidebar items',
+        error: error instanceof Error ? error.message : "Failed to load sidebar items",
         loading: false,
       }));
     }
@@ -79,7 +79,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to assign permissions',
+          error: error instanceof Error ? error.message : "Failed to assign permissions",
           loading: false,
         }));
         throw error;
@@ -98,7 +98,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to add permission',
+          error: error instanceof Error ? error.message : "Failed to add permission",
           loading: false,
         }));
         throw error;
@@ -121,7 +121,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to remove permission',
+          error: error instanceof Error ? error.message : "Failed to remove permission",
           loading: false,
         }));
         throw error;
@@ -140,7 +140,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to assign sidebar items',
+          error: error instanceof Error ? error.message : "Failed to assign sidebar items",
           loading: false,
         }));
         throw error;
@@ -159,7 +159,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to add sidebar item',
+          error: error instanceof Error ? error.message : "Failed to add sidebar item",
           loading: false,
         }));
         throw error;
@@ -182,7 +182,7 @@ export function useRoleAssignments(token: string, roleId: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to remove sidebar item',
+          error: error instanceof Error ? error.message : "Failed to remove sidebar item",
           loading: false,
         }));
         throw error;

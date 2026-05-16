@@ -1,5 +1,5 @@
 /* ─── Fonts ────────────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,56 +9,56 @@
 @layer base {
   :root {
     /* Page & card surfaces */
-    --background:        210 20% 98%;
-    --foreground:        215 25% 12%;
-    --card:              0 0% 100%;
-    --card-foreground:   215 25% 12%;
-    --popover:           0 0% 100%;
-    --popover-foreground:215 25% 12%;
+    --background: 210 20% 98%;
+    --foreground: 215 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 12%;
 
     /* Brand — Notify/Afrisinc primary (cyan-blue from style guide) */
-    --primary:           202 97% 45%;
-    --primary-foreground:0 0% 100%;
-    --primary-light:     202 82% 57%;
-    --primary-lighter:   202 72% 67%;
-    --primary-muted:     202 62% 78%;
-    --primary-pale:      202 85% 90%;
+    --primary: 202 97% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 202 82% 57%;
+    --primary-lighter: 202 72% 67%;
+    --primary-muted: 202 62% 78%;
+    --primary-pale: 202 85% 90%;
 
     /* Neutral surfaces */
-    --secondary:         215 20% 95%;
-    --secondary-foreground:215 25% 12%;
-    --muted:             215 15% 94%;
-    --muted-foreground:  215 12% 50%;
+    --secondary: 215 20% 95%;
+    --secondary-foreground: 215 25% 12%;
+    --muted: 215 15% 94%;
+    --muted-foreground: 215 12% 50%;
 
     /* Accent (hover states, selected items) */
-    --accent:            202 85% 94%;
+    --accent: 202 85% 94%;
     --accent-foreground: 202 97% 30%;
 
     /* Status */
-    --destructive:       0 72% 55%;
-    --destructive-foreground:0 0% 100%;
-    --success:           152 60% 42%;
-    --success-foreground:0 0% 100%;
-    --warning:           38 92% 50%;
-    --warning-foreground:0 0% 100%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 60% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
 
     /* Form & focus */
-    --border:            215 20% 91%;
-    --input:             215 20% 91%;
-    --ring:              202 97% 45%;
+    --border: 215 20% 91%;
+    --input: 215 20% 91%;
+    --ring: 202 97% 45%;
 
     /* Border radius (from style guide) */
-    --radius:            0.625rem;   /* 10px — default card radius */
+    --radius: 0.625rem; /* 10px — default card radius */
 
     /* Sidebar */
-    --sidebar-background:        0 0% 100%;
-    --sidebar-foreground:        215 12% 50%;
-    --sidebar-primary:           202 97% 45%;
-    --sidebar-primary-foreground:0 0% 100%;
-    --sidebar-accent:            202 85% 96%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 12% 50%;
+    --sidebar-primary: 202 97% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 202 85% 96%;
     --sidebar-accent-foreground: 202 97% 30%;
-    --sidebar-border:            215 20% 93%;
-    --sidebar-ring:              202 97% 45%;
+    --sidebar-border: 215 20% 93%;
+    --sidebar-ring: 202 97% 45%;
 
     /* Layout */
     --topbar-height: 3.5rem;
@@ -66,47 +66,47 @@
 
   /* ─── Dark mode ─────────────────────────────────────────────────────────── */
   .dark {
-    --background:        215 28% 8%;
-    --foreground:        210 20% 95%;
-    --card:              215 25% 11%;
-    --card-foreground:   210 20% 95%;
-    --popover:           215 25% 11%;
-    --popover-foreground:210 20% 95%;
+    --background: 215 28% 8%;
+    --foreground: 210 20% 95%;
+    --card: 215 25% 11%;
+    --card-foreground: 210 20% 95%;
+    --popover: 215 25% 11%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary:           202 90% 50%;
-    --primary-foreground:0 0% 100%;
-    --primary-light:     202 75% 55%;
-    --primary-lighter:   202 65% 62%;
-    --primary-muted:     202 40% 35%;
-    --primary-pale:      202 30% 20%;
+    --primary: 202 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 202 75% 55%;
+    --primary-lighter: 202 65% 62%;
+    --primary-muted: 202 40% 35%;
+    --primary-pale: 202 30% 20%;
 
-    --secondary:         215 20% 16%;
-    --secondary-foreground:210 20% 95%;
-    --muted:             215 18% 16%;
-    --muted-foreground:  215 12% 55%;
+    --secondary: 215 20% 16%;
+    --secondary-foreground: 210 20% 95%;
+    --muted: 215 18% 16%;
+    --muted-foreground: 215 12% 55%;
 
-    --accent:            202 40% 18%;
+    --accent: 202 40% 18%;
     --accent-foreground: 202 80% 70%;
 
-    --destructive:       0 62% 45%;
-    --destructive-foreground:0 0% 100%;
-    --success:           152 50% 38%;
-    --success-foreground:0 0% 100%;
-    --warning:           38 80% 45%;
-    --warning-foreground:0 0% 100%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 50% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 80% 45%;
+    --warning-foreground: 0 0% 100%;
 
-    --border:            215 18% 18%;
-    --input:             215 18% 18%;
-    --ring:              202 90% 50%;
+    --border: 215 18% 18%;
+    --input: 215 18% 18%;
+    --ring: 202 90% 50%;
 
-    --sidebar-background:        215 28% 10%;
-    --sidebar-foreground:        215 12% 60%;
-    --sidebar-primary:           202 90% 50%;
-    --sidebar-primary-foreground:0 0% 100%;
-    --sidebar-accent:            202 30% 16%;
+    --sidebar-background: 215 28% 10%;
+    --sidebar-foreground: 215 12% 60%;
+    --sidebar-primary: 202 90% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 202 30% 16%;
     --sidebar-accent-foreground: 202 80% 70%;
-    --sidebar-border:            215 18% 16%;
-    --sidebar-ring:              202 90% 50%;
+    --sidebar-border: 215 18% 16%;
+    --sidebar-ring: 202 90% 50%;
   }
 }
 
@@ -118,16 +118,30 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    font-family:
+      "Manrope",
+      system-ui,
+      -apple-system,
+      sans-serif;
     font-size: 1rem;
     line-height: 1.5;
   }
 
   /* Scrollbar — subtle */
-  ::-webkit-scrollbar       { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
 }
 
 /* ─── Utility classes ───────────────────────────────────────────────────────── */
@@ -149,18 +163,24 @@
 
   /* Mono font helper */
   .font-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
   }
 
   /* Display / heading font */
   .font-display {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: "Playfair Display", Georgia, serif;
   }
 
   /* Animation delays */
-  .animation-delay-150  { animation-delay: 150ms;  }
-  .animation-delay-300  { animation-delay: 300ms;  }
-  .animation-delay-2000 { animation-delay: 2000ms; }
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2000ms;
+  }
 
   /* Page section separator */
   .section-divider {
@@ -192,7 +212,7 @@
 
   /* Monospaced values (API keys, IDs, code) */
   .text-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
     @apply text-sm;
   }
 

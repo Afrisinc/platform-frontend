@@ -3,14 +3,14 @@
  * Custom hook for managing permissions
  */
 
-import { useState, useCallback } from 'react';
-import type { Permission } from '@/types/admin';
+import { useState, useCallback } from "react";
+import type { Permission } from "@/types/admin";
 import {
   fetchPermissions,
   createPermission,
   updatePermission,
   deletePermission,
-} from '@/lib/platformAdminApi';
+} from "@/lib/platformAdminApi";
 
 interface UseAdminPermissionsState {
   permissions: Permission[];
@@ -47,7 +47,7 @@ export function useAdminPermissions(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to load permissions',
+          error: error instanceof Error ? error.message : "Failed to load permissions",
           loading: false,
         }));
       }
@@ -69,7 +69,7 @@ export function useAdminPermissions(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to create permission',
+          error: error instanceof Error ? error.message : "Failed to create permission",
           loading: false,
         }));
         throw error;
@@ -82,7 +82,11 @@ export function useAdminPermissions(token: string) {
     async (permissionId: string, name?: string, description?: string, category?: string) => {
       setState((prev) => ({ ...prev, loading: true, error: null }));
       try {
-        const response = await updatePermission(token, permissionId, { name, description, category });
+        const response = await updatePermission(token, permissionId, {
+          name,
+          description,
+          category,
+        });
         setState((prev) => ({
           ...prev,
           permissions: prev.permissions.map((p) => (p.id === permissionId ? response.data : p)),
@@ -92,7 +96,7 @@ export function useAdminPermissions(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to update permission',
+          error: error instanceof Error ? error.message : "Failed to update permission",
           loading: false,
         }));
         throw error;
@@ -114,7 +118,7 @@ export function useAdminPermissions(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to delete permission',
+          error: error instanceof Error ? error.message : "Failed to delete permission",
           loading: false,
         }));
         throw error;

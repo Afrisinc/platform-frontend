@@ -3,14 +3,9 @@
  * Custom hook for managing roles
  */
 
-import { useState, useCallback } from 'react';
-import type { Role } from '@/types/admin';
-import {
-  fetchRoles,
-  createRole,
-  updateRole,
-  deleteRole,
-} from '@/lib/platformAdminApi';
+import { useState, useCallback } from "react";
+import type { Role } from "@/types/admin";
+import { fetchRoles, createRole, updateRole, deleteRole } from "@/lib/platformAdminApi";
 
 interface UseAdminRolesState {
   roles: Role[];
@@ -48,7 +43,7 @@ export function useAdminRoles(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to load roles',
+          error: error instanceof Error ? error.message : "Failed to load roles",
           loading: false,
         }));
       }
@@ -71,7 +66,7 @@ export function useAdminRoles(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to create role',
+          error: error instanceof Error ? error.message : "Failed to create role",
           loading: false,
         }));
         throw error;
@@ -95,7 +90,7 @@ export function useAdminRoles(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to update role',
+          error: error instanceof Error ? error.message : "Failed to update role",
           loading: false,
         }));
         throw error;
@@ -118,7 +113,7 @@ export function useAdminRoles(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to delete role',
+          error: error instanceof Error ? error.message : "Failed to delete role",
           loading: false,
         }));
         throw error;

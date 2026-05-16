@@ -19,16 +19,17 @@ interface PageHeaderProps {
  */
 export function PageHeader({ title, subtitle, children, className }: PageHeaderProps) {
   return (
-    <div className={cn("flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", className)}>
+    <div
+      className={cn(
+        "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4",
+        className
+      )}
+    >
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
-        {subtitle && (
-          <p className="text-sm text-muted-foreground mt-1 max-w-xl">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-sm text-muted-foreground mt-1 max-w-xl">{subtitle}</p>}
       </div>
-      {children && (
-        <div className="flex items-center gap-2 shrink-0">{children}</div>
-      )}
+      {children && <div className="flex items-center gap-2 shrink-0">{children}</div>}
     </div>
   );
 }

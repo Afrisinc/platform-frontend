@@ -3,37 +3,46 @@
  * Create, edit, and delete sidebar menu items
  */
 
-import React, { useEffect, useState } from 'react';
-import { Plus, AlertCircle } from 'lucide-react';
-import { usePlatform } from '@/contexts/PlatformContext';
-import { useAdminSidebarItems } from '@/hooks/useAdminSidebarItems';
-import { PageHeader } from '@/components/control/PageHeader';
-import { AdminTable } from '@/components/admin/AdminTable';
-import { AdminFormModal } from '@/components/admin/AdminFormModal';
-import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
-import type { SidebarItem, FormField } from '@/types/admin';
+import React, { useEffect, useState } from "react";
+import { Plus, AlertCircle } from "lucide-react";
+import { usePlatform } from "@/contexts/PlatformContext";
+import { useAdminSidebarItems } from "@/hooks/useAdminSidebarItems";
+import { PageHeader } from "@/components/control/PageHeader";
+import { AdminTable } from "@/components/admin/AdminTable";
+import { AdminFormModal } from "@/components/admin/AdminFormModal";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import type { SidebarItem, FormField } from "@/types/admin";
 
 const ICON_OPTIONS = [
-  { value: 'LayoutDashboard', label: 'Dashboard' },
-  { value: 'Users', label: 'Users' },
-  { value: 'UserCog', label: 'Settings' },
-  { value: 'Settings2', label: 'Settings Alt' },
-  { value: 'CreditCard', label: 'Billing' },
-  { value: 'BarChart3', label: 'Reports' },
-  { value: 'ClipboardList', label: 'Audit' },
-  { value: 'Ticket', label: 'Tickets' },
-  { value: 'Package', label: 'Products' },
-  { value: 'ShieldCheck', label: 'Security' },
-  { value: 'Bell', label: 'Notifications' },
-  { value: 'Layers', label: 'CRM' },
+  { value: "LayoutDashboard", label: "Dashboard" },
+  { value: "Users", label: "Users" },
+  { value: "UserCog", label: "Settings" },
+  { value: "Settings2", label: "Settings Alt" },
+  { value: "CreditCard", label: "Billing" },
+  { value: "BarChart3", label: "Reports" },
+  { value: "ClipboardList", label: "Audit" },
+  { value: "Ticket", label: "Tickets" },
+  { value: "Package", label: "Products" },
+  { value: "ShieldCheck", label: "Security" },
+  { value: "Bell", label: "Notifications" },
+  { value: "Layers", label: "CRM" },
 ];
 
 export default function SidebarManagementPage() {
   const { currentUser } = usePlatform();
   const token = currentUser?.token;
 
-  const { items, loading, error, page, totalPages, loadSidebarItems, createSidebarItem, updateSidebarItem, deleteSidebarItem } =
-    useAdminSidebarItems(token!);
+  const {
+    items,
+    loading,
+    error,
+    page,
+    totalPages,
+    loadSidebarItems,
+    createSidebarItem,
+    updateSidebarItem,
+    deleteSidebarItem,
+  } = useAdminSidebarItems(token!);
 
   const [showFormModal, setShowFormModal] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -49,31 +58,31 @@ export default function SidebarManagementPage() {
 
   const formFields: FormField[] = [
     {
-      name: 'label',
-      label: 'Menu Label',
-      type: 'text',
-      placeholder: 'e.g., Dashboard, Users',
-      value: editingItemId ? items.find((i) => i.id === editingItemId)?.label : '',
+      name: "label",
+      label: "Menu Label",
+      type: "text",
+      placeholder: "e.g., Dashboard, Users",
+      value: editingItemId ? items.find((i) => i.id === editingItemId)?.label : "",
       required: true,
     },
     {
-      name: 'icon',
-      label: 'Icon',
-      type: 'select',
+      name: "icon",
+      label: "Icon",
+      type: "select",
       options: ICON_OPTIONS,
-      value: editingItemId ? items.find((i) => i.id === editingItemId)?.icon : '',
+      value: editingItemId ? items.find((i) => i.id === editingItemId)?.icon : "",
     },
     {
-      name: 'path',
-      label: 'Route Path',
-      type: 'text',
-      placeholder: 'e.g., /dashboard, /users',
-      value: editingItemId ? items.find((i) => i.id === editingItemId)?.path : '',
+      name: "path",
+      label: "Route Path",
+      type: "text",
+      placeholder: "e.g., /dashboard, /users",
+      value: editingItemId ? items.find((i) => i.id === editingItemId)?.path : "",
     },
     {
-      name: 'order',
-      label: 'Order',
-      type: 'number',
+      name: "order",
+      label: "Order",
+      type: "number",
       value: editingItemId ? items.find((i) => i.id === editingItemId)?.order : 0,
     },
   ];
@@ -153,33 +162,33 @@ export default function SidebarManagementPage() {
       <AdminTable<SidebarItem>
         columns={[
           {
-            key: 'label',
-            label: 'Label',
+            key: "label",
+            label: "Label",
             render: (value) => <span className="font-medium">{String(value)}</span>,
           },
           {
-            key: 'icon',
-            label: 'Icon',
+            key: "icon",
+            label: "Icon",
           },
           {
-            key: 'path',
-            label: 'Route',
+            key: "path",
+            label: "Route",
           },
           {
-            key: 'order',
-            label: 'Order',
+            key: "order",
+            label: "Order",
             render: (value) => <span className="font-mono">{Number(value)}</span>,
           },
           {
-            key: 'isActive',
-            label: 'Status',
+            key: "isActive",
+            label: "Status",
             render: (value) => (
               <span
                 className={`px-2 py-1 text-xs rounded-full ${
-                  value ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                  value ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {value ? 'Active' : 'Inactive'}
+                {value ? "Active" : "Inactive"}
               </span>
             ),
           },
@@ -194,7 +203,7 @@ export default function SidebarManagementPage() {
       />
 
       <AdminFormModal
-        title={editingItemId ? 'Edit Menu Item' : 'Create Menu Item'}
+        title={editingItemId ? "Edit Menu Item" : "Create Menu Item"}
         fields={formFields}
         onSubmit={handleFormSubmit}
         onClose={() => {

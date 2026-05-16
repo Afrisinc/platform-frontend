@@ -3,8 +3,8 @@
  * Reusable confirmation dialog for destructive actions
  */
 
-import React from 'react';
-import { AlertTriangle, X } from 'lucide-react';
+import React from "react";
+import { AlertTriangle, X } from "lucide-react";
 
 interface ConfirmDialogProps {
   title: string;
@@ -21,8 +21,8 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({
   title,
   message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
   isOpen,
   isLoading = false,
   isDangerous = false,
@@ -61,9 +61,7 @@ export function ConfirmDialog({
         {/* Content */}
         <div className="p-6">
           <div className="flex gap-4">
-            {isDangerous && (
-              <AlertTriangle className="h-6 w-6 text-destructive flex-shrink-0" />
-            )}
+            {isDangerous && <AlertTriangle className="h-6 w-6 text-destructive flex-shrink-0" />}
             <p className="text-sm text-muted-foreground">{message}</p>
           </div>
         </div>
@@ -82,8 +80,8 @@ export function ConfirmDialog({
             disabled={isLoading || isSubmitting}
             className={`flex-1 px-4 py-2 rounded-md text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
               isDangerous
-                ? 'bg-destructive hover:bg-destructive/90'
-                : 'bg-primary hover:bg-primary/90'
+                ? "bg-destructive hover:bg-destructive/90"
+                : "bg-primary hover:bg-primary/90"
             }`}
           >
             {isSubmitting ? (

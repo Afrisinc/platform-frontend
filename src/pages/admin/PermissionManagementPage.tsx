@@ -3,34 +3,43 @@
  * Create, edit, and delete permissions
  */
 
-import React, { useEffect, useState } from 'react';
-import { Plus, AlertCircle } from 'lucide-react';
-import { usePlatform } from '@/contexts/PlatformContext';
-import { useAdminPermissions } from '@/hooks/useAdminPermissions';
-import { PageHeader } from '@/components/control/PageHeader';
-import { AdminTable } from '@/components/admin/AdminTable';
-import { AdminFormModal } from '@/components/admin/AdminFormModal';
-import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
-import type { Permission, FormField } from '@/types/admin';
+import React, { useEffect, useState } from "react";
+import { Plus, AlertCircle } from "lucide-react";
+import { usePlatform } from "@/contexts/PlatformContext";
+import { useAdminPermissions } from "@/hooks/useAdminPermissions";
+import { PageHeader } from "@/components/control/PageHeader";
+import { AdminTable } from "@/components/admin/AdminTable";
+import { AdminFormModal } from "@/components/admin/AdminFormModal";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import type { Permission, FormField } from "@/types/admin";
 
 const PERMISSION_CATEGORIES = [
-  { value: 'dashboard', label: 'Dashboard' },
-  { value: 'user_management', label: 'User Management' },
-  { value: 'product', label: 'Product' },
-  { value: 'support', label: 'Support' },
-  { value: 'billing', label: 'Billing' },
-  { value: 'analytics', label: 'Analytics' },
-  { value: 'customer', label: 'Customer' },
-  { value: 'settings', label: 'Settings' },
-  { value: 'organization', label: 'Organization' },
+  { value: "dashboard", label: "Dashboard" },
+  { value: "user_management", label: "User Management" },
+  { value: "product", label: "Product" },
+  { value: "support", label: "Support" },
+  { value: "billing", label: "Billing" },
+  { value: "analytics", label: "Analytics" },
+  { value: "customer", label: "Customer" },
+  { value: "settings", label: "Settings" },
+  { value: "organization", label: "Organization" },
 ];
 
 export default function PermissionManagementPage() {
   const { currentUser } = usePlatform();
   const token = currentUser?.token;
 
-  const { permissions, loading, error, page, totalPages, loadPermissions, createPermission, updatePermission, deletePermission } =
-    useAdminPermissions(token!);
+  const {
+    permissions,
+    loading,
+    error,
+    page,
+    totalPages,
+    loadPermissions,
+    createPermission,
+    updatePermission,
+    deletePermission,
+  } = useAdminPermissions(token!);
 
   const [showFormModal, setShowFormModal] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -46,35 +55,48 @@ export default function PermissionManagementPage() {
 
   const formFields: FormField[] = [
     {
-      name: 'name',
-      label: 'Permission Name',
-      type: 'text',
-      placeholder: 'e.g., view_reports, manage_users',
-      value: editingPermissionId ? permissions.find((p) => p.id === editingPermissionId)?.name : '',
+      name: "name",
+      label: "Permission Name",
+      type: "text",
+      placeholder: "e.g., view_reports, manage_users",
+      value: editingPermissionId ? permissions.find((p) => p.id === editingPermissionId)?.name : "",
       required: true,
     },
     {
-      name: 'description',
-      label: 'Description',
-      type: 'textarea',
-      placeholder: 'Describe what this permission allows',
-      value: editingPermissionId ? permissions.find((p) => p.id === editingPermissionId)?.description : '',
+      name: "description",
+      label: "Description",
+      type: "textarea",
+      placeholder: "Describe what this permission allows",
+      value: editingPermissionId
+        ? permissions.find((p) => p.id === editingPermissionId)?.description
+        : "",
     },
     {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
+      name: "category",
+      label: "Category",
+      type: "select",
       options: PERMISSION_CATEGORIES,
-      value: editingPermissionId ? permissions.find((p) => p.id === editingPermissionId)?.category : '',
+      value: editingPermissionId
+        ? permissions.find((p) => p.id === editingPermissionId)?.category
+        : "",
     },
   ];
 
   const handleFormSubmit = async (data: Record<string, unknown>) => {
     if (editingPermissionId) {
-      await updatePermission(editingPermissionId, data.name as string, data.description as string, data.category as string);
+      await updatePermission(
+        editingPermissionId,
+        data.name as string,
+        data.description as string,
+        data.category as string
+      );
       setEditingPermissionId(null);
     } else {
-      await createPermission(data.name as string, data.description as string, data.category as string);
+      await createPermission(
+        data.name as string,
+        data.description as string,
+        data.category as string
+      );
     }
     await loadPermissions(currentPage);
     setShowFormModal(false);
@@ -134,20 +156,20 @@ export default function PermissionManagementPage() {
       <AdminTable<Permission>
         columns={[
           {
-            key: 'name',
-            label: 'Permission Name',
+            key: "name",
+            label: "Permission Name",
             render: (value) => <span className="font-medium">{String(value)}</span>,
           },
           {
-            key: 'description',
-            label: 'Description',
+            key: "description",
+            label: "Description",
           },
           {
-            key: 'category',
-            label: 'Category',
+            key: "category",
+            label: "Category",
             render: (value) => (
               <span className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
-                {String(value || 'uncategorized')}
+                {String(value || "uncategorized")}
               </span>
             ),
           },
@@ -162,7 +184,7 @@ export default function PermissionManagementPage() {
       />
 
       <AdminFormModal
-        title={editingPermissionId ? 'Edit Permission' : 'Create Permission'}
+        title={editingPermissionId ? "Edit Permission" : "Create Permission"}
         fields={formFields}
         onSubmit={handleFormSubmit}
         onClose={() => {

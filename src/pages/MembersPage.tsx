@@ -1,14 +1,25 @@
 import { useState } from "react";
-import { UserPlus, MoreHorizontal, Mail, X } from "lucide-react";
+import { UserPlus, MoreHorizontal, X } from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
 
-const roles = ["Owner", "Admin", "Developer", "Viewer"] as const;
+const ROLE_OPTIONS = [
+  "super_admin",
+  "ops_manager",
+  "finance_admin",
+  "product_manager",
+  "support_lead",
+  "member",
+] as const;
+
+function getStatusBadgeClass(status: "Active" | "Inactive" | "Locked") {
+  if (status === "Active") return "bg-success/10 text-success";
+  if (status === "Inactive") return "bg-muted-foreground/10 text-muted-foreground";
+  return "bg-destructive/10 text-destructive";
+}
 
 export default function MembersPage() {
-  const { members } = usePlatform();
+  const { teamMembers } = usePlatform();
   const [showInvite, setShowInvite] = useState(false);
-  const pending = members.filter((m) => m.status === "Pending");
-  const active = members.filter((m) => m.status === "Active");
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-8 animate-fade-in">
@@ -25,27 +36,6 @@ export default function MembersPage() {
         </button>
       </div>
 
-      {/* Pending Invitations */}
-      {pending.length > 0 && (
-        <div>
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Pending Invitations</h2>
-          <div className="bg-card rounded-xl border border-border divide-y divide-border">
-            {pending.map((m) => (
-              <div key={m.id} className="flex items-center gap-4 p-4">
-                <div className="w-9 h-9 rounded-full bg-warning/10 flex items-center justify-center">
-                  <Mail className="h-4 w-4 text-warning" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">{m.email}</p>
-                  <p className="text-xs text-muted-foreground">Invited as {m.role}</p>
-                </div>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-warning/10 text-warning font-medium">Pending</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Members Table */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
         <div className="overflow-x-auto">
@@ -61,7 +51,7 @@ export default function MembersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {active.map((m) => (
+              {teamMembers.map((m) => (
                 <tr key={m.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
@@ -76,23 +66,28 @@ export default function MembersPage() {
                     <select
                       defaultValue={m.role}
                       className="text-sm bg-transparent border border-border rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-ring"
-                      disabled={m.role === "Owner"}
                     >
-                      {roles.map((r) => (
-                        <option key={r} value={r}>{r}</option>
+                      {ROLE_OPTIONS.map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
                       ))}
                     </select>
                   </td>
                   <td className="px-5 py-4">
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-success/10 text-success font-medium">Active</span>
+                    <span
+                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(m.status)}`}
+                    >
+                      {m.status}
+                    </span>
                   </td>
-                  <td className="px-5 py-4 text-muted-foreground">{new Date(m.joinedAt).toLocaleDateString()}</td>
+                  <td className="px-5 py-4 text-muted-foreground">
+                    {new Date(m.joinedAt).toLocaleDateString()}
+                  </td>
                   <td className="px-5 py-4 text-right">
-                    {m.role !== "Owner" && (
-                      <button className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </button>
-                    )}
+                    <button className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -104,18 +99,28 @@ export default function MembersPage() {
       {/* Invite Modal */}
       {showInvite && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setShowInvite(false)} />
+          <div
+            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm"
+            onClick={() => setShowInvite(false)}
+          />
           <div className="relative bg-card rounded-2xl border border-border shadow-xl w-full max-w-md p-6 animate-fade-in">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">Invite Member</h2>
-              <button onClick={() => setShowInvite(false)} className="p-1.5 rounded-md hover:bg-muted transition-colors">
+              <button
+                onClick={() => setShowInvite(false)}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors"
+              >
                 <X className="h-4 w-4" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium mb-1.5 block">Email</label>
-                <input type="email" placeholder="colleague@company.com" className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+                <input
+                  type="email"
+                  placeholder="colleague@company.com"
+                  className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block">Role</label>

@@ -3,13 +3,13 @@
  * Reusable modal for admin forms (create/edit)
  */
 
-import React, { useState, useEffect } from 'react';
-import { X, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { X, AlertCircle } from "lucide-react";
 
 interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'number';
+  type: "text" | "textarea" | "select" | "number";
   placeholder?: string;
   value?: string | number;
   required?: boolean;
@@ -34,7 +34,7 @@ export function AdminFormModal({
   onClose,
   isOpen,
   isLoading = false,
-  submitLabel = 'Save',
+  submitLabel = "Save",
 }: AdminFormModalProps) {
   const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,18 +44,20 @@ export function AdminFormModal({
     if (isOpen) {
       const initialData: Record<string, unknown> = {};
       initialFields.forEach((field) => {
-        initialData[field.name] = field.value || '';
+        initialData[field.name] = field.value || "";
       });
       setFormData(initialData);
       setErrors({});
     }
   }, [isOpen, initialFields]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -79,7 +81,7 @@ export function AdminFormModal({
       await onSubmit(formData);
       onClose();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
       setErrors((prev) => ({ ...prev, _form: errorMessage }));
     } finally {
       setIsSubmitting(false);
@@ -121,24 +123,24 @@ export function AdminFormModal({
                 {field.required && <span className="text-destructive">*</span>}
               </label>
 
-              {field.type === 'textarea' ? (
+              {field.type === "textarea" ? (
                 <textarea
                   name={field.name}
                   placeholder={field.placeholder}
-                  value={(formData[field.name] as string) || ''}
+                  value={(formData[field.name] as string) || ""}
                   onChange={handleChange}
                   rows={3}
                   className={`w-full px-3 py-2 rounded-md border ${
-                    errors[field.name] ? 'border-destructive' : 'border-border'
+                    errors[field.name] ? "border-destructive" : "border-border"
                   } bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none`}
                 />
-              ) : field.type === 'select' ? (
+              ) : field.type === "select" ? (
                 <select
                   name={field.name}
-                  value={(formData[field.name] as string) || ''}
+                  value={(formData[field.name] as string) || ""}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 rounded-md border ${
-                    errors[field.name] ? 'border-destructive' : 'border-border'
+                    errors[field.name] ? "border-destructive" : "border-border"
                   } bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20`}
                 >
                   <option value="">Select {field.label}</option>
@@ -153,10 +155,10 @@ export function AdminFormModal({
                   type={field.type}
                   name={field.name}
                   placeholder={field.placeholder}
-                  value={(formData[field.name] as string | number) || ''}
+                  value={(formData[field.name] as string | number) || ""}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 rounded-md border ${
-                    errors[field.name] ? 'border-destructive' : 'border-border'
+                    errors[field.name] ? "border-destructive" : "border-border"
                   } bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20`}
                 />
               )}

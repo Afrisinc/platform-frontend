@@ -3,6 +3,17 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { authService } from "@/services/authService";
 import { AfrisincLoader } from "@/components/AfrisincLoader";
 
+/**
+ * AuthCallbackPage — /auth/callback
+ *
+ * Receives the OAuth authorization code from the auth-ui-service redirect,
+ * exchanges it for a JWT via the API gateway, stores the session, then
+ * navigates the user into the platform.
+ *
+ * Flow:
+ *   auth-ui login → auth-service issues code → redirect here with ?code=xxx
+ *   → POST /oauth/exchange → GET /users/profile → store SESSION_KEY → navigate "/"
+ */
 export default function AuthCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -12,8 +23,8 @@ export default function AuthCallbackPage() {
     const code = searchParams.get("code");
 
     if (!code) {
-      // For demo: simulate a valid code so the flow works without a real auth server
-      handleExchange("demo_code");
+      setError("No authorization code provided. Redirecting to login…");
+      setTimeout(() => authService.redirectToAuthUI(), 2000);
       return;
     }
 
@@ -22,16 +33,12 @@ export default function AuthCallbackPage() {
 
   async function handleExchange(code: string) {
     try {
-      const { user, tokens } = await authService.exchangeCode(code);
-      authService.storeTokens(tokens);
-      authService.storeUser(user);
-      navigate("/platform", { replace: true });
+      const session = await authService.exchangeCode(code);
+      authService.storeSession(session);
+      navigate("/", { replace: true });
     } catch {
-      setError("Authentication failed. Redirecting to login...");
-      setTimeout(() => {
-        // In production: redirect to auth.afrisinc.com/login
-        navigate("/", { replace: true });
-      }, 2000);
+      setError("Authentication failed. Redirecting to login…");
+      setTimeout(() => authService.redirectToAuthUI(), 2000);
     }
   }
 
@@ -48,5 +55,5 @@ export default function AuthCallbackPage() {
     );
   }
 
-  return <AfrisincLoader message="Signing you in..." submessage="Verifying your credentials" />;
+  return <AfrisincLoader message="Signing you in…" submessage="Verifying your credentials" />;
 }

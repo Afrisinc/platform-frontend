@@ -3,14 +3,14 @@
  * Custom hook for managing sidebar items
  */
 
-import { useState, useCallback } from 'react';
-import type { SidebarItem } from '@/types/admin';
+import { useState, useCallback } from "react";
+import type { SidebarItem } from "@/types/admin";
 import {
   fetchSidebarItems,
   createSidebarItem,
   updateSidebarItem,
   deleteSidebarItem,
-} from '@/lib/platformAdminApi';
+} from "@/lib/platformAdminApi";
 
 interface UseAdminSidebarItemsState {
   items: SidebarItem[];
@@ -47,7 +47,7 @@ export function useAdminSidebarItems(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to load sidebar items',
+          error: error instanceof Error ? error.message : "Failed to load sidebar items",
           loading: false,
         }));
       }
@@ -56,7 +56,13 @@ export function useAdminSidebarItems(token: string) {
   );
 
   const handleCreateSidebarItem = useCallback(
-    async (label: string, icon?: string, path?: string, order?: number, parentId?: string | null) => {
+    async (
+      label: string,
+      icon?: string,
+      path?: string,
+      order?: number,
+      parentId?: string | null
+    ) => {
       setState((prev) => ({ ...prev, loading: true, error: null }));
       try {
         const response = await createSidebarItem(token, { label, icon, path, order, parentId });
@@ -69,7 +75,7 @@ export function useAdminSidebarItems(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to create sidebar item',
+          error: error instanceof Error ? error.message : "Failed to create sidebar item",
           loading: false,
         }));
         throw error;
@@ -92,7 +98,7 @@ export function useAdminSidebarItems(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to update sidebar item',
+          error: error instanceof Error ? error.message : "Failed to update sidebar item",
           loading: false,
         }));
         throw error;
@@ -114,7 +120,7 @@ export function useAdminSidebarItems(token: string) {
       } catch (error) {
         setState((prev) => ({
           ...prev,
-          error: error instanceof Error ? error.message : 'Failed to delete sidebar item',
+          error: error instanceof Error ? error.message : "Failed to delete sidebar item",
           loading: false,
         }));
         throw error;

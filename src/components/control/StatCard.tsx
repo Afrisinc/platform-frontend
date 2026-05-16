@@ -40,11 +40,8 @@ export function StatCard({
     neutral: "text-muted-foreground",
   };
 
-  const ChangeIcon = changeType === "positive"
-    ? TrendingUp
-    : changeType === "negative"
-    ? TrendingDown
-    : Minus;
+  const ChangeIcon =
+    changeType === "positive" ? TrendingUp : changeType === "negative" ? TrendingDown : Minus;
 
   return (
     <div

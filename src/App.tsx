@@ -1,39 +1,31 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import LoginPage from "./pages/LoginPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import { SESSION_KEY } from "./contexts/PlatformContext";
+import { authService } from "./services/authService";
 
 const queryClient = new QueryClient();
 
 /**
- * ProtectedRoute — checks localStorage for a valid session.
- * If none exists, redirects to /login before the platform renders.
- * This runs on every navigation so manual URL-typing is also caught.
+ * ProtectedIndex — renders Index only if session exists.
+ * Checks session ONCE on mount, not on every render.
+ * This prevents logout on state changes and navigation.
  */
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const hasSession = Boolean(localStorage.getItem(SESSION_KEY));
-  if (!hasSession) {
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
-}
+function ProtectedIndex() {
+  useEffect(() => {
+    // Only check session on mount/unmount
+    const hasSession = Boolean(localStorage.getItem(SESSION_KEY));
+    if (!hasSession) {
+      authService.redirectToAuthUI();
+    }
+  }, []); // Empty deps: runs only once on mount
 
-/**
- * GuestRoute — if the user is already logged in and tries to visit /login,
- * send them straight back to the platform.
- */
-function GuestRoute({ children }: { children: React.ReactNode }) {
-  const hasSession = Boolean(localStorage.getItem(SESSION_KEY));
-  if (hasSession) {
-    return <Navigate to="/" replace />;
-  }
-  return <>{children}</>;
+  return <Index />;
 }
 
 const App = () => (
@@ -43,31 +35,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Platform — requires active session */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Index />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Login — redirects away if already authenticated */}
-          <Route
-            path="/login"
-            element={
-              <GuestRoute>
-                <LoginPage />
-              </GuestRoute>
-            }
-          />
-
-          {/* Auth callback for SSO / magic link (future) */}
+          {/* Auth callback — receives SSO code from auth-ui-service */}
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
+          {/* Platform routes — all paths under /* render Index (session-protected) */}
+          <Route path="/*" element={<ProtectedIndex />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

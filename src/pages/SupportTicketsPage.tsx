@@ -1,9 +1,22 @@
 import { useState } from "react";
 import {
-  Search, Filter, Plus, X, ChevronDown,
-  AlertCircle, AlertTriangle, Clock, CheckCircle2, ArrowUpRight,
+  Search,
+  Filter,
+  Plus,
+  X,
+  ChevronDown,
+  AlertCircle,
+  AlertTriangle,
+  Clock,
+  CheckCircle2,
+  ArrowUpRight,
 } from "lucide-react";
-import { usePlatform, SupportTicket, TicketStatus, TicketPriority } from "@/contexts/PlatformContext";
+import {
+  usePlatform,
+  SupportTicket,
+  TicketStatus,
+  TicketPriority,
+} from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
 import { StatusBadge } from "@/components/control/StatusBadge";
 import { EmptyState } from "@/components/control/EmptyState";
@@ -12,25 +25,23 @@ import { SectionLabel } from "@/components/control/SectionLabel";
 import { UserAvatar } from "@/components/control/UserAvatar";
 
 const STATUS_ORDER: TicketStatus[] = [
-  "Open", "In Progress", "Escalated", "Waiting on Customer", "Resolved"
+  "Open",
+  "In Progress",
+  "Escalated",
+  "Waiting on Customer",
+  "Resolved",
 ];
 
 const STATUS_ICONS: Record<TicketStatus, React.ElementType> = {
-  "Open": AlertTriangle,
+  Open: AlertTriangle,
   "In Progress": Clock,
-  "Escalated": AlertCircle,
+  Escalated: AlertCircle,
   "Waiting on Customer": Clock,
-  "Resolved": CheckCircle2,
+  Resolved: CheckCircle2,
 };
 
 // ── Ticket detail panel ───────────────────────────────────────────────────────
-function TicketDetail({
-  ticket,
-  onClose,
-}: {
-  ticket: SupportTicket;
-  onClose: () => void;
-}) {
+function TicketDetail({ ticket, onClose }: { ticket: SupportTicket; onClose: () => void }) {
   const { can, teamMembers } = usePlatform();
   const canRespond = can("respond_tickets");
   const canEscalate = can("escalate_tickets");
@@ -68,7 +79,12 @@ function TicketDetail({
           <div>
             <SectionLabel className="mb-3">Customer</SectionLabel>
             <div className="flex items-center gap-3">
-              <UserAvatar initials={ticket.customerName.split(" ").map((n) => n[0]).join("")} />
+              <UserAvatar
+                initials={ticket.customerName
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              />
               <div>
                 <p className="text-sm font-medium text-foreground">{ticket.customerName}</p>
                 <p className="text-xs text-muted-foreground">{ticket.customerEmail}</p>
@@ -81,15 +97,39 @@ function TicketDetail({
             <SectionLabel className="mb-3">Details</SectionLabel>
             <div className="bg-muted/40 rounded-lg divide-y divide-border">
               {[
-                { label: "Product", value: ticket.productId.charAt(0).toUpperCase() + ticket.productId.slice(1) },
-                { label: "Channel", value: ticket.channel.charAt(0).toUpperCase() + ticket.channel.slice(1) },
+                {
+                  label: "Product",
+                  value: ticket.productId.charAt(0).toUpperCase() + ticket.productId.slice(1),
+                },
+                {
+                  label: "Channel",
+                  value: ticket.channel.charAt(0).toUpperCase() + ticket.channel.slice(1),
+                },
                 { label: "Assigned To", value: ticket.assignedTo ?? "Unassigned" },
-                { label: "Created", value: new Date(ticket.createdAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) },
-                { label: "Last Updated", value: new Date(ticket.updatedAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) },
+                {
+                  label: "Created",
+                  value: new Date(ticket.createdAt).toLocaleString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
+                {
+                  label: "Last Updated",
+                  value: new Date(ticket.updatedAt).toLocaleString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between px-4 py-3">
                   <span className="text-xs text-muted-foreground">{row.label}</span>
-                  <span className={`text-sm font-medium text-foreground ${row.label === "Assigned To" && !ticket.assignedTo ? "italic text-muted-foreground" : ""}`}>
+                  <span
+                    className={`text-sm font-medium text-foreground ${row.label === "Assigned To" && !ticket.assignedTo ? "italic text-muted-foreground" : ""}`}
+                  >
                     {row.value}
                   </span>
                 </div>
@@ -103,7 +143,10 @@ function TicketDetail({
               <SectionLabel className="mb-2">Tags</SectionLabel>
               <div className="flex flex-wrap gap-1.5">
                 {ticket.tags.map((tag) => (
-                  <span key={tag} className="px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground border border-border">
+                  <span
+                    key={tag}
+                    className="px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground border border-border"
+                  >
                     #{tag}
                   </span>
                 ))}
@@ -149,7 +192,9 @@ function TicketDetail({
                 <select className="w-full h-9 px-3 pr-8 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
                   <option value="">Unassigned</option>
                   {agents.map((a) => (
-                    <option key={a.id} value={a.name}>{a.name} — {a.role.replace("_", " ")}</option>
+                    <option key={a.id} value={a.name}>
+                      {a.name} — {a.role.replace("_", " ")}
+                    </option>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
@@ -181,10 +226,10 @@ export default function SupportTicketsPage() {
     return matchSearch && matchStatus && matchPriority;
   });
 
-  const open       = tickets.filter((t) => t.status === "Open").length;
+  const open = tickets.filter((t) => t.status === "Open").length;
   const inProgress = tickets.filter((t) => t.status === "In Progress").length;
-  const escalated  = tickets.filter((t) => t.status === "Escalated").length;
-  const resolved   = tickets.filter((t) => t.status === "Resolved").length;
+  const escalated = tickets.filter((t) => t.status === "Escalated").length;
+  const resolved = tickets.filter((t) => t.status === "Resolved").length;
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-fade-in">
@@ -201,10 +246,38 @@ export default function SupportTicketsPage() {
 
       {/* Stat row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Open"       value={open}       icon={AlertTriangle}  changeType="neutral"  iconBg="bg-primary/10"     iconColor="text-primary" />
-        <StatCard label="In Progress" value={inProgress} icon={Clock}          changeType="neutral"  iconBg="bg-warning/10"    iconColor="text-warning" />
-        <StatCard label="Escalated"  value={escalated}  icon={AlertCircle}    changeType={escalated > 0 ? "negative" : "neutral"} iconBg="bg-destructive/10" iconColor="text-destructive" />
-        <StatCard label="Resolved"   value={resolved}   icon={CheckCircle2}   changeType="positive" iconBg="bg-success/10"    iconColor="text-success" />
+        <StatCard
+          label="Open"
+          value={open}
+          icon={AlertTriangle}
+          changeType="neutral"
+          iconBg="bg-primary/10"
+          iconColor="text-primary"
+        />
+        <StatCard
+          label="In Progress"
+          value={inProgress}
+          icon={Clock}
+          changeType="neutral"
+          iconBg="bg-warning/10"
+          iconColor="text-warning"
+        />
+        <StatCard
+          label="Escalated"
+          value={escalated}
+          icon={AlertCircle}
+          changeType={escalated > 0 ? "negative" : "neutral"}
+          iconBg="bg-destructive/10"
+          iconColor="text-destructive"
+        />
+        <StatCard
+          label="Resolved"
+          value={resolved}
+          icon={CheckCircle2}
+          changeType="positive"
+          iconBg="bg-success/10"
+          iconColor="text-success"
+        />
       </div>
 
       {/* Filters + table */}
@@ -258,11 +331,16 @@ export default function SupportTicketsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/40">
-                {["Ticket", "Customer", "Priority", "Status", "Assigned To", "Updated"].map((col) => (
-                  <th key={col} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    {col}
-                  </th>
-                ))}
+                {["Ticket", "Customer", "Priority", "Status", "Assigned To", "Updated"].map(
+                  (col) => (
+                    <th
+                      key={col}
+                      className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                    >
+                      {col}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -287,12 +365,17 @@ export default function SupportTicketsPage() {
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-start gap-2">
-                          <SIcon className={`h-4 w-4 mt-0.5 shrink-0 ${
-                            t.status === "Escalated" ? "text-destructive" :
-                            t.status === "Resolved"  ? "text-success" :
-                            t.status === "Open"      ? "text-warning" :
-                            "text-muted-foreground"
-                          }`} />
+                          <SIcon
+                            className={`h-4 w-4 mt-0.5 shrink-0 ${
+                              t.status === "Escalated"
+                                ? "text-destructive"
+                                : t.status === "Resolved"
+                                  ? "text-success"
+                                  : t.status === "Open"
+                                    ? "text-warning"
+                                    : "text-muted-foreground"
+                            }`}
+                          />
                           <div>
                             <p className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                               {t.subject}
@@ -312,10 +395,15 @@ export default function SupportTicketsPage() {
                         <StatusBadge label={t.status} variant="ticket-status" />
                       </td>
                       <td className="px-4 py-3 text-sm text-muted-foreground">
-                        {t.assignedTo ?? <span className="italic text-muted-foreground/60">Unassigned</span>}
+                        {t.assignedTo ?? (
+                          <span className="italic text-muted-foreground/60">Unassigned</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-xs text-muted-foreground">
-                        {new Date(t.updatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                        {new Date(t.updatedAt).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                        })}
                       </td>
                     </tr>
                   );
@@ -336,9 +424,7 @@ export default function SupportTicketsPage() {
       </div>
 
       {/* Detail panel */}
-      {selected && (
-        <TicketDetail ticket={selected} onClose={() => setSelected(null)} />
-      )}
+      {selected && <TicketDetail ticket={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }

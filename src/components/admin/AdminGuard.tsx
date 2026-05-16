@@ -3,16 +3,16 @@
  * Protects admin routes and only allows super_admin users
  */
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { usePlatform } from '@/contexts/PlatformContext';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { usePlatform } from "@/contexts/PlatformContext";
 
 interface AdminGuardProps {
   children: React.ReactNode;
-  requiredRole?: 'super_admin' | 'ops_manager';
+  requiredRole?: "super_admin" | "ops_manager";
 }
 
-export function AdminGuard({ children, requiredRole = 'super_admin' }: AdminGuardProps) {
+export function AdminGuard({ children, requiredRole = "super_admin" }: AdminGuardProps) {
   const { currentUser } = usePlatform();
 
   // Check if user is authenticated

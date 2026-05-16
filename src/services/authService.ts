@@ -1,83 +1,150 @@
-// Auth service — mocked, swap to real API later
-// POST /auth/token
-// GET  /auth/me
-// POST /auth/logout
+import { API_BASE } from "@/lib/api";
+import { SESSION_KEY } from "@/contexts/PlatformContext";
+import type { ControlRole } from "@/contexts/PlatformContext";
 
-const delay = (ms = 800) => new Promise((r) => setTimeout(r, ms));
+// ── Response types ────────────────────────────────────────────────────────────
 
-export interface AuthUser {
+interface ExchangeResponse {
+  token: string;
+  token_type: string;
+  expires_in: number;
+  user_id: string;
+  email: string;
+  account_ids: string[];
+  role_id?: string;
+  role?: string;
+}
+
+interface UserProfileResponse {
   id: string;
   email: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+// ── Session shape stored in localStorage ─────────────────────────────────────
+
+export interface AuthSession {
+  id: string;
   name: string;
+  email: string;
+  role: ControlRole;
+  /** Backend role UUID — allows direct sidebar fetch without an extra name-lookup round-trip. */
+  role_id?: string;
+  productAccess: string[];
   avatar: string;
+  /** JWT used for all authenticated API calls. */
+  token: string;
 }
 
-export interface AuthTokens {
-  access_token: string;
-  refresh_token: string;
-  expires_at: number;
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function buildInitials(name: string): string {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }
 
-const MOCK_USER: AuthUser = {
-  id: "usr_1",
-  email: "john@afrisinc.com",
-  name: "John Doe",
-  avatar: "JD",
-};
+function normalizeRole(role?: string): ControlRole {
+  if (!role) return "support_agent";
+  return role.toLowerCase().replace(/\s+/g, "_") as ControlRole;
+}
+
+// ── Auth service ──────────────────────────────────────────────────────────────
 
 export const authService = {
-  exchangeCode: async (code: string): Promise<{ user: AuthUser; tokens: AuthTokens }> => {
-    await delay(1500);
-    if (!code) throw new Error("Invalid authorization code");
+  /**
+   * Exchange an authorization code (from the SSO callback URL) for a JWT.
+   * Immediately fetches the user profile for display name.
+   * Returns a complete AuthSession ready to be stored.
+   */
+  async exchangeCode(code: string): Promise<AuthSession> {
+    const res = await fetch(`${API_BASE}/oauth/exchange`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error((err as any)?.resp_msg ?? "Token exchange failed");
+    }
+
+    const json = await res.json();
+    const data: ExchangeResponse = json.data ?? json;
+
+    if (!data.token || !data.user_id) {
+      throw new Error("Invalid exchange response — missing token or user_id");
+    }
+
+    // Fetch user profile for display name (best-effort — session still succeeds without it)
+    let firstName = "";
+    let lastName = "";
+    try {
+      const profileRes = await fetch(`${API_BASE}/users/profile`, {
+        headers: { Authorization: `Bearer ${data.token}` },
+      });
+      if (profileRes.ok) {
+        const profileJson = await profileRes.json();
+        const profile: UserProfileResponse = profileJson.data ?? profileJson;
+        firstName = profile.firstName ?? "";
+        lastName = profile.lastName ?? "";
+      }
+    } catch {
+      // Intentionally swallowed — name falls back to email
+    }
+
+    const name = `${firstName} ${lastName}`.trim() || data.email;
+
     return {
-      user: MOCK_USER,
-      tokens: {
-        access_token: `at_${crypto.randomUUID()}`,
-        refresh_token: `rt_${crypto.randomUUID()}`,
-        expires_at: Date.now() + 3600 * 1000,
-      },
+      id: data.user_id,
+      name,
+      email: data.email,
+      role: normalizeRole(data.role),
+      role_id: data.role_id,
+      productAccess: [],
+      avatar: buildInitials(name),
+      token: data.token,
     };
   },
 
-  getMe: async (): Promise<AuthUser> => {
-    await delay(300);
-    return MOCK_USER;
+  /** Persist the session to localStorage under the platform SESSION_KEY. */
+  storeSession(session: AuthSession): void {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   },
 
-  logout: async (): Promise<void> => {
-    await delay(200);
+  /** Read the current session. Returns null if absent or malformed. */
+  getSession(): AuthSession | null {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      return raw ? (JSON.parse(raw) as AuthSession) : null;
+    } catch {
+      return null;
+    }
   },
 
-  /** Store tokens securely */
-  storeTokens: (tokens: AuthTokens) => {
-    localStorage.setItem("afrisinc_access_token", tokens.access_token);
-    localStorage.setItem("afrisinc_refresh_token", tokens.refresh_token);
-    localStorage.setItem("afrisinc_token_expiry", String(tokens.expires_at));
+  /** Remove the session (logout). */
+  clearSession(): void {
+    localStorage.removeItem(SESSION_KEY);
   },
 
-  getStoredToken: (): string | null => localStorage.getItem("afrisinc_access_token"),
-
-  isAuthenticated: (): boolean => {
-    const token = localStorage.getItem("afrisinc_access_token");
-    const expiry = localStorage.getItem("afrisinc_token_expiry");
-    if (!token || !expiry) return false;
-    return Date.now() < Number(expiry);
+  /** True if a session record exists in localStorage. */
+  isAuthenticated(): boolean {
+    return Boolean(localStorage.getItem(SESSION_KEY));
   },
 
-  clearTokens: () => {
-    localStorage.removeItem("afrisinc_access_token");
-    localStorage.removeItem("afrisinc_refresh_token");
-    localStorage.removeItem("afrisinc_token_expiry");
-    localStorage.removeItem("afrisinc_active_workspace");
-    localStorage.removeItem("afrisinc_active_product");
-  },
-
-  storeUser: (user: AuthUser) => {
-    localStorage.setItem("afrisinc_user", JSON.stringify(user));
-  },
-
-  getStoredUser: (): AuthUser | null => {
-    const raw = localStorage.getItem("afrisinc_user");
-    return raw ? JSON.parse(raw) : null;
+  /**
+   * Clear session and redirect the browser to the auth-ui login page.
+   * The auth-ui will redirect back to /auth/callback after successful login.
+   */
+  redirectToAuthUI(): void {
+    this.clearSession();
+    const authUiUrl = import.meta.env.VITE_AUTH_UI_URL ?? "http://localhost:8098";
+    const callbackUrl = `${window.location.origin}/auth/callback`;
+    window.location.href = `${authUiUrl}/login?redirect_uri=${encodeURIComponent(callbackUrl)}`;
   },
 };

@@ -1,7 +1,16 @@
 import { useState } from "react";
 import {
-  Search, Filter, Download, Lock, User, Package,
-  Ticket, Key, CreditCard, Shield, MonitorSmartphone,
+  Search,
+  Filter,
+  Download,
+  Lock,
+  User,
+  Package,
+  Ticket,
+  Key,
+  CreditCard,
+  Shield,
+  MonitorSmartphone,
 } from "lucide-react";
 import { usePlatform, AuditEvent, AuditEntityType } from "@/contexts/PlatformContext";
 import { PageHeader } from "@/components/control/PageHeader";
@@ -11,43 +20,46 @@ import { UserAvatar } from "@/components/control/UserAvatar";
 
 // ── Entity type icon map ────────────────────────────────────────────────────────
 const ENTITY_ICONS: Record<AuditEntityType, React.ElementType> = {
-  user:    User,
+  user: User,
   product: Package,
-  ticket:  Ticket,
+  ticket: Ticket,
   customer: User,
   api_key: Key,
   billing: CreditCard,
-  role:    Shield,
+  role: Shield,
   session: MonitorSmartphone,
 };
 
 const ENTITY_COLORS: Record<AuditEntityType, string> = {
-  user:     "bg-primary/10 text-primary",
-  product:  "bg-success/10 text-success",
-  ticket:   "bg-warning/10 text-warning",
+  user: "bg-primary/10 text-primary",
+  product: "bg-success/10 text-success",
+  ticket: "bg-warning/10 text-warning",
   customer: "bg-accent text-accent-foreground",
-  api_key:  "bg-muted text-muted-foreground",
-  billing:  "bg-warning/10 text-warning",
-  role:     "bg-destructive/10 text-destructive",
-  session:  "bg-muted text-muted-foreground",
+  api_key: "bg-muted text-muted-foreground",
+  billing: "bg-warning/10 text-warning",
+  role: "bg-destructive/10 text-destructive",
+  session: "bg-muted text-muted-foreground",
 };
 
 const ENTITY_LABELS: Record<AuditEntityType, string> = {
-  user:     "User",
-  product:  "Product",
-  ticket:   "Ticket",
+  user: "User",
+  product: "Product",
+  ticket: "Ticket",
   customer: "Customer",
-  api_key:  "API Key",
-  billing:  "Billing",
-  role:     "Role",
-  session:  "Session",
+  api_key: "API Key",
+  billing: "Billing",
+  role: "Role",
+  session: "Session",
 };
 
 function formatTimestamp(ts: string) {
   const d = new Date(ts);
   return d.toLocaleString("en-GB", {
-    day: "numeric", month: "short", year: "numeric",
-    hour: "2-digit", minute: "2-digit",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -86,7 +98,9 @@ export default function AuditLogPage() {
       <div className="flex items-start gap-3 bg-muted/50 border border-border rounded-xl px-4 py-3.5">
         <Lock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
         <p className="text-sm text-muted-foreground">
-          The audit log is <strong className="text-foreground">append-only</strong>. No one — including Super Admin — can edit or delete entries. Every permission change, login, and ticket action is recorded here.
+          The audit log is <strong className="text-foreground">append-only</strong>. No one —
+          including Super Admin — can edit or delete entries. Every permission change, login, and
+          ticket action is recorded here.
         </p>
       </div>
 
@@ -135,7 +149,10 @@ export default function AuditLogPage() {
             {filtered.map((event) => {
               const Icon = ENTITY_ICONS[event.entityType];
               const colorClass = ENTITY_COLORS[event.entityType];
-              const initials = event.userName.split(" ").map((n) => n[0]).join("");
+              const initials = event.userName
+                .split(" ")
+                .map((n) => n[0])
+                .join("");
 
               return (
                 <div
@@ -143,7 +160,9 @@ export default function AuditLogPage() {
                   className="flex items-start gap-4 px-5 py-4 hover:bg-muted/20 transition-colors"
                 >
                   {/* Entity type icon */}
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${colorClass}`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${colorClass}`}
+                  >
                     <Icon className="h-4 w-4" />
                   </div>
 
@@ -153,7 +172,9 @@ export default function AuditLogPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-semibold text-foreground">{event.action}</p>
-                          <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${colorClass}`}>
+                          <span
+                            className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${colorClass}`}
+                          >
                             {ENTITY_LABELS[event.entityType]}
                           </span>
                           {event.productId && (
@@ -162,7 +183,9 @@ export default function AuditLogPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-0.5 leading-snug">{event.description}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5 leading-snug">
+                          {event.description}
+                        </p>
                       </div>
                       <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0 pt-0.5">
                         {formatTimestamp(event.timestamp)}
@@ -178,7 +201,9 @@ export default function AuditLogPage() {
                       {event.ip && (
                         <>
                           <span className="text-muted-foreground/40">·</span>
-                          <span className="text-xs font-mono text-muted-foreground">{event.ip}</span>
+                          <span className="text-xs font-mono text-muted-foreground">
+                            {event.ip}
+                          </span>
                         </>
                       )}
                     </div>
