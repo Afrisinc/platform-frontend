@@ -1,52 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* ─── Fonts ────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Light mode tokens ─────────────────────────────────────────────────────── */
 @layer base {
   :root {
+    /* Page & card surfaces */
     --background: 210 20% 98%;
     --foreground: 215 25% 12%;
-
     --card: 0 0% 100%;
     --card-foreground: 215 25% 12%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 12%;
 
+    /* Brand — Notify/Afrisinc primary (cyan-blue from style guide) */
     --primary: 202 97% 45%;
     --primary-foreground: 0 0% 100%;
-
     --primary-light: 202 82% 57%;
     --primary-lighter: 202 72% 67%;
     --primary-muted: 202 62% 78%;
     --primary-pale: 202 85% 90%;
 
+    /* Neutral surfaces */
     --secondary: 215 20% 95%;
     --secondary-foreground: 215 25% 12%;
-
     --muted: 215 15% 94%;
     --muted-foreground: 215 12% 50%;
 
+    /* Accent (hover states, selected items) */
     --accent: 202 85% 94%;
     --accent-foreground: 202 97% 30%;
 
+    /* Status */
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-
     --success: 152 60% 42%;
     --success-foreground: 0 0% 100%;
-
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
+    /* Form & focus */
     --border: 215 20% 91%;
     --input: 215 20% 91%;
     --ring: 202 97% 45%;
 
-    --radius: 0.625rem;
+    /* Border radius (from style guide) */
+    --radius: 0.625rem; /* 10px — default card radius */
 
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 215 12% 50%;
     --sidebar-primary: 202 97% 45%;
@@ -56,22 +60,21 @@
     --sidebar-border: 215 20% 93%;
     --sidebar-ring: 202 97% 45%;
 
+    /* Layout */
     --topbar-height: 3.5rem;
   }
 
+  /* ─── Dark mode ─────────────────────────────────────────────────────────── */
   .dark {
     --background: 215 28% 8%;
     --foreground: 210 20% 95%;
-
     --card: 215 25% 11%;
     --card-foreground: 210 20% 95%;
-
     --popover: 215 25% 11%;
     --popover-foreground: 210 20% 95%;
 
     --primary: 202 90% 50%;
     --primary-foreground: 0 0% 100%;
-
     --primary-light: 202 75% 55%;
     --primary-lighter: 202 65% 62%;
     --primary-muted: 202 40% 35%;
@@ -79,7 +82,6 @@
 
     --secondary: 215 20% 16%;
     --secondary-foreground: 210 20% 95%;
-
     --muted: 215 18% 16%;
     --muted-foreground: 215 12% 55%;
 
@@ -88,10 +90,8 @@
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
-
     --success: 152 50% 38%;
     --success-foreground: 0 0% 100%;
-
     --warning: 38 80% 45%;
     --warning-foreground: 0 0% 100%;
 
@@ -110,6 +110,7 @@
   }
 }
 
+/* ─── Base resets ───────────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border;
@@ -117,16 +118,141 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-family:
+      "Manrope",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Scrollbar — subtle */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
   }
 }
 
+/* ─── Utility classes ───────────────────────────────────────────────────────── */
 @layer utilities {
+  /* Gradient text — uses primary brand colour */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--primary-light)) 100%
+    );
   }
 
+  /* Glassmorphism card */
   .glass-card {
     @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
+  }
+
+  /* Mono font helper */
+  .font-mono {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+  }
+
+  /* Display / heading font */
+  .font-display {
+    font-family: "Playfair Display", Georgia, serif;
+  }
+
+  /* Animation delays */
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2000ms;
+  }
+
+  /* Page section separator */
+  .section-divider {
+    @apply border-t border-border my-6;
+  }
+}
+
+/* ─── Afrisinc Control typography helpers ───────────────────────────────────── */
+@layer components {
+  /* Page-level headings */
+  .heading-page {
+    @apply text-2xl font-bold tracking-tight text-foreground;
+  }
+
+  /* Section headings inside cards */
+  .heading-section {
+    @apply text-lg font-semibold text-foreground;
+  }
+
+  /* Uppercase label / category marker */
+  .label-section {
+    @apply text-xs font-semibold uppercase tracking-wider text-muted-foreground;
+  }
+
+  /* Body paragraph */
+  .text-body {
+    @apply text-sm text-muted-foreground leading-relaxed;
+  }
+
+  /* Monospaced values (API keys, IDs, code) */
+  .text-mono {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    @apply text-sm;
+  }
+
+  /* Primary action button */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors;
+  }
+
+  /* Secondary / outline button */
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors;
+  }
+
+  /* Destructive action */
+  .btn-destructive {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:bg-destructive/90 transition-colors;
+  }
+
+  /* Standard form input */
+  .input-field {
+    @apply w-full h-9 px-3 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow;
+  }
+
+  /* Card container */
+  .control-card {
+    @apply bg-card rounded-xl border border-border;
+  }
+
+  /* Table header cell */
+  .table-th {
+    @apply text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider;
+  }
+
+  /* Table body cell */
+  .table-td {
+    @apply px-4 py-3 text-sm text-foreground;
   }
 }

@@ -24,21 +24,30 @@ export function WorkspaceSwitcher() {
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-xl shadow-lg z-50 p-1.5 animate-fade-in">
-            <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Workspaces</p>
+            <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Workspaces
+            </p>
             {workspaces.map((ws) => (
               <button
                 key={ws.id}
-                onClick={() => { setCurrentWorkspace(ws); setOpen(false); }}
+                onClick={() => {
+                  setCurrentWorkspace(ws);
+                  setOpen(false);
+                }}
                 className={cn(
                   "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-colors",
-                  ws.id === currentWorkspace.id ? "bg-accent text-accent-foreground" : "hover:bg-secondary"
+                  ws.id === currentWorkspace.id
+                    ? "bg-accent text-accent-foreground"
+                    : "hover:bg-secondary"
                 )}
               >
                 <span className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10 text-primary text-xs font-bold">
                   {ws.initials}
                 </span>
                 <span className="font-medium">{ws.name}</span>
-                {ws.id === currentWorkspace.id && <Check className="h-4 w-4 ml-auto text-primary" />}
+                {ws.id === currentWorkspace.id && (
+                  <Check className="h-4 w-4 ml-auto text-primary" />
+                )}
               </button>
             ))}
             <div className="border-t border-border mt-1 pt-1">

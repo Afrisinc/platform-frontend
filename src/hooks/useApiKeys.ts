@@ -9,7 +9,11 @@ export function useApiKeys(wsId: string) {
 export function useCreateApiKey(wsId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; environment: ApiKey["environment"]; description?: string }) => apiKeyService.create(wsId, data),
+    mutationFn: (data: {
+      name: string;
+      environment: ApiKey["environment"];
+      description?: string;
+    }) => apiKeyService.create(wsId, data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["apiKeys", wsId] }),
   });
 }
