@@ -37,6 +37,7 @@ jobs:
           push: true
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_AUTH_UI_URL=${{ secrets.VITE_AUTH_UI_URL }}
           tags: |
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:sha-${{ github.sha }}
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:staging
