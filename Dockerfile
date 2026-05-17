@@ -2,11 +2,11 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Enable pnpm via Corepack
-RUN corepack enable && corepack prepare pnpm@11.1.2 --activate
+RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 
 # Install dependencies
 COPY package.json pnpm-lock.yaml ./
-RUN printf "scripts.allowUnapproved=true\n" > .pnpmrc && pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
