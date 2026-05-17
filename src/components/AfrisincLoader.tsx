@@ -6,9 +6,18 @@ interface AfrisincLoaderProps {
   className?: string;
 }
 
-export function AfrisincLoader({ message = "Loading...", submessage, className }: AfrisincLoaderProps) {
+export function AfrisincLoader({
+  message = "Loading...",
+  submessage,
+  className,
+}: AfrisincLoaderProps) {
   return (
-    <div className={cn("min-h-screen flex items-center justify-center relative overflow-hidden", className)}>
+    <div
+      className={cn(
+        "min-h-screen flex items-center justify-center relative overflow-hidden",
+        className
+      )}
+    >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary-pale/30 animate-gradient" />
       <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl animate-blob" />
@@ -25,9 +34,7 @@ export function AfrisincLoader({ message = "Loading...", submessage, className }
         {/* Message */}
         <div className="text-center animate-fade-in-up animation-delay-300">
           <p className="text-lg font-semibold text-foreground">{message}</p>
-          {submessage && (
-            <p className="text-sm text-muted-foreground mt-1">{submessage}</p>
-          )}
+          {submessage && <p className="text-sm text-muted-foreground mt-1">{submessage}</p>}
         </div>
 
         {/* Dots loader */}

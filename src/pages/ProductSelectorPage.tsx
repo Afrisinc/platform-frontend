@@ -2,12 +2,24 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { platformService } from "@/services/platformService";
 import { AfrisincLoader } from "@/components/AfrisincLoader";
-import { ArrowLeft, Bell, CreditCard, Shield, FileText, Fingerprint, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  Bell,
+  CreditCard,
+  Shield,
+  FileText,
+  Fingerprint,
+  ArrowRight,
+} from "lucide-react";
 import type { Product } from "@/contexts/PlatformContext";
 import { cn } from "@/lib/utils";
 
 const ICON_MAP: Record<string, React.ElementType> = {
-  Bell, CreditCard, Shield, FileText, Fingerprint,
+  Bell,
+  CreditCard,
+  Shield,
+  FileText,
+  Fingerprint,
 };
 
 export default function ProductSelectorPage() {
@@ -89,7 +101,9 @@ export default function ProductSelectorPage() {
                     <p className="font-semibold text-foreground">{product.name}</p>
                     <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{product.description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                    {product.description}
+                  </p>
                 </div>
               </button>
             );

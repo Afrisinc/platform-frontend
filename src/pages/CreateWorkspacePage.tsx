@@ -37,11 +37,15 @@ export default function CreateWorkspacePage() {
           </div>
 
           <h1 className="text-2xl font-bold text-foreground">Create a Workspace</h1>
-          <p className="text-muted-foreground text-sm mt-1.5 mb-8">Give your workspace a name to get started</p>
+          <p className="text-muted-foreground text-sm mt-1.5 mb-8">
+            Give your workspace a name to get started
+          </p>
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground mb-1.5 block">Workspace name</label>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">
+                Workspace name
+              </label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}

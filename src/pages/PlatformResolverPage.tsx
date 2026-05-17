@@ -22,20 +22,10 @@ export default function PlatformResolverPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function resolve() {
-    // Step 1: Check authentication
+    // Step 1: Verify authentication — redirect to auth-ui if no session
     if (!authService.isAuthenticated()) {
-      // For demo purposes, auto-authenticate
-      authService.storeTokens({
-        access_token: "demo_token",
-        refresh_token: "demo_refresh",
-        expires_at: Date.now() + 3600 * 1000,
-      });
-      authService.storeUser({
-        id: "usr_1",
-        email: "john@afrisinc.com",
-        name: "John Doe",
-        avatar: "JD",
-      });
+      authService.redirectToAuthUI();
+      return;
     }
 
     // Step 2: Fetch workspaces
@@ -71,7 +61,6 @@ export default function PlatformResolverPage() {
       const hasAccess = await platformService.validateProductAccess(workspaceId, storedProduct);
       if (hasAccess) {
         setStep("redirecting");
-        // Redirect to platform dashboard (main app)
         navigate("/", { replace: true });
         return;
       }
@@ -81,10 +70,5 @@ export default function PlatformResolverPage() {
     navigate(`/workspace/${workspaceId}/products`, { replace: true });
   }
 
-  return (
-    <AfrisincLoader
-      message={STEP_MESSAGES[step]}
-      submessage="Setting up your experience"
-    />
-  );
+  return <AfrisincLoader message={STEP_MESSAGES[step]} submessage="Setting up your experience" />;
 }

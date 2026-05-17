@@ -1,4 +1,12 @@
-import { Bell, Users, CreditCard, BarChart3, ExternalLink, CheckCircle2, Circle } from "lucide-react";
+import {
+  Bell,
+  Users,
+  CreditCard,
+  BarChart3,
+  ExternalLink,
+  CheckCircle2,
+  Circle,
+} from "lucide-react";
 import { usePlatform } from "@/contexts/PlatformContext";
 
 const iconMap: Record<string, React.ElementType> = { Bell, Users, CreditCard, BarChart3 };
@@ -17,12 +25,20 @@ export default function ProductsPage() {
         {products.map((p) => {
           const Icon = iconMap[p.icon];
           return (
-            <div key={p.id} className="bg-card rounded-xl border border-border p-6 flex flex-col hover:shadow-md transition-shadow">
+            <div
+              key={p.id}
+              className="bg-card rounded-xl border border-border p-6 flex flex-col hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `hsl(${p.color} / 0.12)`, color: `hsl(${p.color})` }}>
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: `hsl(${p.color} / 0.12)`, color: `hsl(${p.color})` }}
+                >
                   {Icon && <Icon className="h-6 w-6" />}
                 </div>
-                <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${p.active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
+                <span
+                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${p.active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}
+                >
                   {p.active ? <CheckCircle2 className="h-3 w-3" /> : <Circle className="h-3 w-3" />}
                   {p.active ? "Active" : "Not activated"}
                 </span>

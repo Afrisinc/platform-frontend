@@ -35,7 +35,9 @@ export default function BillingPage() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Billing</h1>
-        <p className="text-muted-foreground mt-1">Manage workspace billing, subscriptions, and payment methods.</p>
+        <p className="text-muted-foreground mt-1">
+          Manage workspace billing, subscriptions, and payment methods.
+        </p>
       </div>
 
       {/* Tab bar */}

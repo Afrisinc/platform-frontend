@@ -4,7 +4,10 @@ import { usePlatform, Product } from "@/contexts/PlatformContext";
 import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, React.ElementType> = {
-  Bell, Users, CreditCard, BarChart3,
+  Bell,
+  Users,
+  CreditCard,
+  BarChart3,
 };
 
 export function ProductSwitcher() {
@@ -25,7 +28,9 @@ export function ProductSwitcher() {
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full left-0 mt-1 w-72 bg-popover border border-border rounded-xl shadow-lg z-50 p-1.5 animate-fade-in">
-            <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Launch Product</p>
+            <p className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Launch Product
+            </p>
             {products.map((p) => {
               const Icon = iconMap[p.icon];
               return (

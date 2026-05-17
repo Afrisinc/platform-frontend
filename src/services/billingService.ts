@@ -29,12 +29,12 @@ export interface ProductSubscription {
   plan: string;
   billingModel: BillingModel;
   billingCycle: "monthly" | "annual";
-  price: number;          // base price
-  seats?: number;         // for seat-based
+  price: number; // base price
+  seats?: number; // for seat-based
   pricePerSeat?: number;
   status: "active" | "trialing" | "canceled" | "past_due";
   nextBillingDate: string;
-  color: string;          // HSL for badges
+  color: string; // HSL for badges
 }
 
 export interface UsageMetric {
@@ -245,9 +245,7 @@ const INVOICES: Invoice[] = [
     date: "2026-02-01",
     dueDate: "2026-02-15",
     products: ["Notify"],
-    lineItems: [
-      { product: "Notify", description: "Pro Plan – Feb 2026", amount: 29 },
-    ],
+    lineItems: [{ product: "Notify", description: "Pro Plan – Feb 2026", amount: 29 }],
     subtotal: 29,
     tax: 0,
     total: 29,
@@ -257,8 +255,26 @@ const INVOICES: Invoice[] = [
 ];
 
 const PAYMENT_METHODS: PaymentMethod[] = [
-  { id: "pm_1", type: "card", brand: "Visa", last4: "4242", expMonth: 5, expYear: 2028, isDefault: true, addedAt: "2026-05-10" },
-  { id: "pm_2", type: "card", brand: "Mastercard", last4: "8888", expMonth: 11, expYear: 2027, isDefault: false, addedAt: "2026-03-22" },
+  {
+    id: "pm_1",
+    type: "card",
+    brand: "Visa",
+    last4: "4242",
+    expMonth: 5,
+    expYear: 2028,
+    isDefault: true,
+    addedAt: "2026-05-10",
+  },
+  {
+    id: "pm_2",
+    type: "card",
+    brand: "Mastercard",
+    last4: "8888",
+    expMonth: 11,
+    expYear: 2027,
+    isDefault: false,
+    addedAt: "2026-03-22",
+  },
 ];
 
 const BILLING_SETTINGS: BillingSettings = {
@@ -279,18 +295,58 @@ const BILLING_SETTINGS: BillingSettings = {
 
 const PLAN_OPTIONS: Record<string, PlanOption[]> = {
   notify: [
-    { id: "free", name: "Free", price: 0, features: ["1,000 messages/mo", "Email only", "Community support"] },
-    { id: "pro", name: "Pro", price: 29, features: ["50,000 messages/mo", "Email + SMS + Push", "Priority support", "Templates"] },
-    { id: "enterprise", name: "Enterprise", price: 99, features: ["Unlimited messages", "All channels", "Dedicated support", "SLA", "SSO"] },
+    {
+      id: "free",
+      name: "Free",
+      price: 0,
+      features: ["1,000 messages/mo", "Email only", "Community support"],
+    },
+    {
+      id: "pro",
+      name: "Pro",
+      price: 29,
+      features: ["50,000 messages/mo", "Email + SMS + Push", "Priority support", "Templates"],
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise",
+      price: 99,
+      features: ["Unlimited messages", "All channels", "Dedicated support", "SLA", "SSO"],
+    },
   ],
   vpn: [
-    { id: "personal", name: "Personal", price: 5, features: ["1 device", "All locations", "Basic support"] },
-    { id: "team", name: "Team", price: 5, features: ["Per seat", "5+ devices", "Admin console", "Priority support"] },
-    { id: "business", name: "Business", price: 8, features: ["Per seat", "Unlimited devices", "SSO", "Dedicated IP", "SLA"] },
+    {
+      id: "personal",
+      name: "Personal",
+      price: 5,
+      features: ["1 device", "All locations", "Basic support"],
+    },
+    {
+      id: "team",
+      name: "Team",
+      price: 5,
+      features: ["Per seat", "5+ devices", "Admin console", "Priority support"],
+    },
+    {
+      id: "business",
+      name: "Business",
+      price: 8,
+      features: ["Per seat", "Unlimited devices", "SSO", "Dedicated IP", "SLA"],
+    },
   ],
   pay: [
-    { id: "standard", name: "Standard", price: 0, features: ["2.9% + $0.30/txn", "Dashboard", "Basic reports"] },
-    { id: "plus", name: "Plus", price: 25, features: ["2.4% + $0.25/txn", "Advanced reports", "Webhooks", "Priority support"] },
+    {
+      id: "standard",
+      name: "Standard",
+      price: 0,
+      features: ["2.9% + $0.30/txn", "Dashboard", "Basic reports"],
+    },
+    {
+      id: "plus",
+      name: "Plus",
+      price: 25,
+      features: ["2.4% + $0.25/txn", "Advanced reports", "Webhooks", "Priority support"],
+    },
   ],
 };
 
@@ -308,9 +364,16 @@ export const billingService = {
       usageCharges,
       nextInvoiceDate: "2026-06-01",
       subscriptions: SUBSCRIPTIONS,
-      usageSummary: USAGE_METRICS.map((u) => ({ productName: u.productName, charges: u.currentCharges })),
+      usageSummary: USAGE_METRICS.map((u) => ({
+        productName: u.productName,
+        charges: u.currentCharges,
+      })),
       alerts: [
-        { id: "a1", type: "info", message: "Your next invoice is estimated at $86.30 on Jun 1, 2026." },
+        {
+          id: "a1",
+          type: "info",
+          message: "Your next invoice is estimated at $86.30 on Jun 1, 2026.",
+        },
       ],
       paymentMethod: PAYMENT_METHODS.find((p) => p.isDefault) ?? null,
     };
@@ -360,7 +423,16 @@ export const billingService = {
 
   addPaymentMethod: async (_wsId: string, _data: { token: string }): Promise<PaymentMethod> => {
     await delay(500);
-    return { id: "pm_new", type: "card", brand: "Visa", last4: "1234", expMonth: 12, expYear: 2029, isDefault: false, addedAt: new Date().toISOString() };
+    return {
+      id: "pm_new",
+      type: "card",
+      brand: "Visa",
+      last4: "1234",
+      expMonth: 12,
+      expYear: 2029,
+      isDefault: false,
+      addedAt: new Date().toISOString(),
+    };
   },
 
   removePaymentMethod: async (_wsId: string, _pmId: string): Promise<void> => {
@@ -386,7 +458,10 @@ export const billingService = {
     return BILLING_SETTINGS;
   },
 
-  updateBillingSettings: async (_wsId: string, _data: Partial<BillingSettings>): Promise<BillingSettings> => {
+  updateBillingSettings: async (
+    _wsId: string,
+    _data: Partial<BillingSettings>
+  ): Promise<BillingSettings> => {
     await delay(400);
     return { ...BILLING_SETTINGS, ..._data };
   },

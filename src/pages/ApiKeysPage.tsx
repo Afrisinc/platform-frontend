@@ -17,7 +17,9 @@ export default function ApiKeysPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
-          <p className="text-muted-foreground mt-1">Manage API keys for your workspace integrations.</p>
+          <p className="text-muted-foreground mt-1">
+            Manage API keys for your workspace integrations.
+          </p>
         </div>
         <button
           onClick={() => setShowCreate(true)}
@@ -34,9 +36,13 @@ export default function ApiKeysPage() {
             <ShieldAlert className="h-5 w-5 text-success shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-sm font-semibold text-success mb-1">API Key Created</p>
-              <p className="text-xs text-muted-foreground mb-3">Copy this key now. It won't be shown again.</p>
+              <p className="text-xs text-muted-foreground mb-3">
+                Copy this key now. It won't be shown again.
+              </p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 px-3 py-2 rounded-lg bg-card border border-border text-sm font-mono break-all">{createdKey}</code>
+                <code className="flex-1 px-3 py-2 rounded-lg bg-card border border-border text-sm font-mono break-all">
+                  {createdKey}
+                </code>
                 <button
                   onClick={() => navigator.clipboard.writeText(createdKey)}
                   className="p-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors shrink-0"
@@ -45,7 +51,10 @@ export default function ApiKeysPage() {
                 </button>
               </div>
             </div>
-            <button onClick={() => setCreatedKey(null)} className="p-1 rounded-md hover:bg-muted transition-colors">
+            <button
+              onClick={() => setCreatedKey(null)}
+              className="p-1 rounded-md hover:bg-muted transition-colors"
+            >
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
@@ -60,8 +69,12 @@ export default function ApiKeysPage() {
               <tr className="border-b border-border bg-muted/30">
                 <th className="text-left font-medium text-muted-foreground px-5 py-3">Name</th>
                 <th className="text-left font-medium text-muted-foreground px-5 py-3">Key</th>
-                <th className="text-left font-medium text-muted-foreground px-5 py-3">Environment</th>
-                <th className="text-left font-medium text-muted-foreground px-5 py-3">Created By</th>
+                <th className="text-left font-medium text-muted-foreground px-5 py-3">
+                  Environment
+                </th>
+                <th className="text-left font-medium text-muted-foreground px-5 py-3">
+                  Created By
+                </th>
                 <th className="text-left font-medium text-muted-foreground px-5 py-3">Created</th>
                 <th className="text-right font-medium text-muted-foreground px-5 py-3">Actions</th>
               </tr>
@@ -76,21 +89,33 @@ export default function ApiKeysPage() {
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <code className="text-xs bg-muted px-2 py-1 rounded font-mono">{k.prefix}••••••••</code>
+                    <code className="text-xs bg-muted px-2 py-1 rounded font-mono">
+                      {k.prefix}••••••••
+                    </code>
                   </td>
                   <td className="px-5 py-4">
-                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${k.environment === "Production" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                    <span
+                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${k.environment === "Production" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}
+                    >
                       {k.environment}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-muted-foreground">{k.createdBy}</td>
-                  <td className="px-5 py-4 text-muted-foreground">{new Date(k.createdAt).toLocaleDateString()}</td>
+                  <td className="px-5 py-4 text-muted-foreground">
+                    {new Date(k.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-1">
-                      <button className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground" title="Copy key prefix">
+                      <button
+                        className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground"
+                        title="Copy key prefix"
+                      >
                         <Copy className="h-3.5 w-3.5" />
                       </button>
-                      <button className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors text-destructive" title="Revoke key">
+                      <button
+                        className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors text-destructive"
+                        title="Revoke key"
+                      >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
@@ -107,25 +132,38 @@ export default function ApiKeysPage() {
         <ShieldAlert className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
         <div>
           <p className="text-sm font-medium">Security Notice</p>
-          <p className="text-sm text-muted-foreground">API keys are only shown once at creation. Store them securely. Rotate keys regularly and revoke any that are no longer in use.</p>
+          <p className="text-sm text-muted-foreground">
+            API keys are only shown once at creation. Store them securely. Rotate keys regularly and
+            revoke any that are no longer in use.
+          </p>
         </div>
       </div>
 
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setShowCreate(false)} />
+          <div
+            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm"
+            onClick={() => setShowCreate(false)}
+          />
           <div className="relative bg-card rounded-2xl border border-border shadow-xl w-full max-w-md p-6 animate-fade-in">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">Create API Key</h2>
-              <button onClick={() => setShowCreate(false)} className="p-1.5 rounded-md hover:bg-muted transition-colors">
+              <button
+                onClick={() => setShowCreate(false)}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors"
+              >
                 <X className="h-4 w-4" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium mb-1.5 block">Key Name</label>
-                <input type="text" placeholder="e.g., Production API" className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+                <input
+                  type="text"
+                  placeholder="e.g., Production API"
+                  className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block">Environment</label>
@@ -136,7 +174,11 @@ export default function ApiKeysPage() {
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block">Description</label>
-                <textarea placeholder="What is this key used for?" rows={2} className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none" />
+                <textarea
+                  placeholder="What is this key used for?"
+                  rows={2}
+                  className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                />
               </div>
               <button
                 onClick={handleCreate}
