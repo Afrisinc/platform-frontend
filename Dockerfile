@@ -6,7 +6,7 @@ RUN corepack enable && corepack prepare pnpm@11.1.2 --activate
 
 # Install dependencies
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm config set scripts.allowUnapproved=true && pnpm install --frozen-lockfile
+RUN printf "scripts.allowUnapproved=true\n" > .pnpmrc && pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
