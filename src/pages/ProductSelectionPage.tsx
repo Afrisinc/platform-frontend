@@ -12,6 +12,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { productService } from "@/services/productService";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   getStoredUser,
   clearSession,
@@ -168,12 +169,15 @@ export default function ProductSelectionPage() {
       <header className="relative border-b border-border/50 bg-card/80 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm shadow-primary/20">
-              <span className="text-primary-foreground font-bold text-sm">A</span>
-            </div>
+            <img
+              src="/afrisic-logo.png"
+              alt="Afrisinc"
+              className="w-9 h-9 rounded-xl object-contain"
+            />
             <span className="font-semibold text-foreground tracking-tight">Afrisinc</span>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-muted/50 border border-border/50">
               <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
                 <span className="text-xs font-semibold text-primary">{userInitials}</span>

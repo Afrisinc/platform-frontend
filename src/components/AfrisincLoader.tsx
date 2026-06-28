@@ -26,9 +26,11 @@ export function AfrisincLoader({
       <div className="relative z-10 flex flex-col items-center gap-8">
         {/* Logo */}
         <div className="animate-logo-pulse">
-          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/25">
-            <span className="text-primary-foreground font-bold text-2xl">A</span>
-          </div>
+          <img
+            src="/afrisic-logo.png"
+            alt="Afrisinc"
+            className="w-16 h-16 rounded-2xl object-contain shadow-lg shadow-primary/25"
+          />
         </div>
 
         {/* Message */}

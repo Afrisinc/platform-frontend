@@ -1,36 +1,55 @@
 import { useState, useEffect, useCallback } from "react";
+import {
+  type Theme,
+  getCurrentTheme,
+  setThemeCookie,
+  getResolvedTheme,
+  applyTheme,
+} from "@/lib/theme";
 
-type Theme = "light" | "dark" | "system";
-
-function getSystemTheme(): "light" | "dark" {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
+export type { Theme };
 
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
-    return (localStorage.getItem("afrisinc-theme") as Theme) || "system";
+    // Initialize from cookie or localStorage
+    return getCurrentTheme();
   });
 
-  const resolved = theme === "system" ? getSystemTheme() : theme;
+  const resolved = getResolvedTheme(theme);
 
+  // Apply theme to DOM and persist
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(resolved);
+    applyTheme(theme);
+    // Sync to both localStorage (backward compat) and cookie (cross-domain)
     localStorage.setItem("afrisinc-theme", theme);
-  }, [theme, resolved]);
+    setThemeCookie(theme);
+  }, [theme]);
 
+  // Listen for system preference changes when in system mode
   useEffect(() => {
     if (theme !== "system") return;
+
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const root = document.documentElement;
-      root.classList.remove("light", "dark");
-      root.classList.add(getSystemTheme());
-    };
+    const handler = () => applyTheme("system");
+
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, [theme]);
+
+  // Listen for storage events (cross-tab sync)
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "afrisinc-theme" && e.newValue) {
+        const newTheme = e.newValue as Theme;
+        if (["light", "dark", "system"].includes(newTheme)) {
+          setThemeState(newTheme);
+        }
+      }
+    };
+
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
 
   const setTheme = useCallback((t: Theme) => setThemeState(t), []);
 

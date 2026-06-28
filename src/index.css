@@ -62,6 +62,18 @@
 
     /* Layout */
     --topbar-height: 3.5rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(202 97% 50%) 0%, hsl(202 82% 46%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(210 15% 95%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 15% 98%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(215 25% 12% / 0.03);
+    --shadow-md: 0 4px 6px -1px hsl(215 25% 12% / 0.05), 0 2px 4px -2px hsl(215 25% 12% / 0.03);
+    --shadow-lg: 0 10px 15px -3px hsl(215 25% 12% / 0.05), 0 4px 6px -4px hsl(215 25% 12% / 0.03);
+    --shadow-xl: 0 20px 25px -5px hsl(215 25% 12% / 0.08), 0 8px 10px -6px hsl(215 25% 12% / 0.03);
+    --shadow-primary: 0 10px 40px -10px hsl(202 97% 45% / 0.3);
   }
 
   /* ─── Dark mode ─────────────────────────────────────────────────────────── */
@@ -107,6 +119,18 @@
     --sidebar-accent-foreground: 202 80% 70%;
     --sidebar-border: 215 18% 16%;
     --sidebar-ring: 202 90% 50%;
+
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(202 90% 55%) 0%, hsl(202 85% 48%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(215 28% 8%) 0%, hsl(215 30% 6%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(215 25% 12%) 0%, hsl(215 25% 10%) 100%);
+
+    /* Dark shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.25);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.35), 0 2px 4px -2px hsl(0 0% 0% / 0.25);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.35), 0 4px 6px -4px hsl(0 0% 0% / 0.25);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.45), 0 8px 10px -6px hsl(0 0% 0% / 0.35);
+    --shadow-primary: 0 10px 40px -10px hsl(202 90% 50% / 0.35);
   }
 }
 

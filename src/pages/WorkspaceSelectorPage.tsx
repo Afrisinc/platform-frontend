@@ -37,9 +37,11 @@ export default function WorkspaceSelectorPage() {
       <div className="relative z-10 w-full max-w-lg px-6">
         {/* Header */}
         <div className="text-center mb-10 animate-fade-in-up">
-          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-5 shadow-lg shadow-primary/20">
-            <span className="text-primary-foreground font-bold text-xl">A</span>
-          </div>
+          <img
+            src="/afrisic-logo.png"
+            alt="Afrisinc"
+            className="w-14 h-14 rounded-2xl object-contain mx-auto mb-5 shadow-lg shadow-primary/20"
+          />
           <h1 className="text-2xl font-bold text-foreground">Select a Workspace</h1>
           <p className="text-muted-foreground text-sm mt-1.5">Choose a workspace to continue</p>
         </div>

@@ -32,9 +32,11 @@ export default function CreateWorkspacePage() {
         </button>
 
         <div className="animate-fade-in-up">
-          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
-            <span className="text-primary-foreground font-bold text-xl">A</span>
-          </div>
+          <img
+            src="/afrisic-logo.png"
+            alt="Afrisinc"
+            className="w-14 h-14 rounded-2xl object-contain mb-6 shadow-lg shadow-primary/20"
+          />
 
           <h1 className="text-2xl font-bold text-foreground">Create a Workspace</h1>
           <p className="text-muted-foreground text-sm mt-1.5 mb-8">
