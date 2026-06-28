@@ -1,74 +1,57 @@
-import type { Product } from "@/contexts/PlatformContext";
+import { apiFetch } from "@/lib/api";
+import type { UserProduct } from "@/contexts/PlatformContext";
 
-// GET    /workspaces/:wsId/products
-// POST   /workspaces/:wsId/products/:id/activate
-// POST   /workspaces/:wsId/products/:id/deactivate
+// GET /products/me - Get user's enrolled products
 
-const delay = (ms = 200) => new Promise((r) => setTimeout(r, ms));
+/** Product icon mapping based on product code. */
+const PRODUCT_ICON_MAP: Record<string, string> = {
+  NOTIFY: "Bell",
+  CRM: "Users",
+  BILLING: "CreditCard",
+  PAYMENTS: "CreditCard",
+  PAY: "CreditCard",
+  ANALYTICS: "BarChart3",
+  ANA: "BarChart3",
+  VPN: "Shield",
+};
 
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: "notify",
-    name: "Notify",
-    description: "Send email, SMS and push notifications.",
-    icon: "Bell",
-    color: "202 97% 45%",
-    url: "https://notify.afrisinc.com/app",
-    active: true,
-  },
-  {
-    id: "crm",
-    name: "CRM",
-    description: "Manage customer relationships.",
-    icon: "Users",
-    color: "152 60% 42%",
-    url: "https://crm.afrisinc.com/app",
-    active: true,
-  },
-  {
-    id: "billing",
-    name: "Billing",
-    description: "Manage payments and subscriptions.",
-    icon: "CreditCard",
-    color: "38 92% 50%",
-    url: "https://billing.afrisinc.com/app",
-    active: true,
-  },
-  {
-    id: "analytics",
-    name: "Analytics",
-    description: "View metrics and reports.",
-    icon: "BarChart3",
-    color: "270 60% 55%",
-    url: "https://analytics.afrisinc.com/app",
-    active: false,
-  },
-  {
-    id: "vpn",
-    name: "VPN",
-    description: "Secure network access for your team.",
-    icon: "Shield",
-    color: "340 65% 50%",
-    url: "https://vpn.afrisinc.com/app",
-    active: false,
-  },
-];
+/** Product color mapping based on product code (HSL format). */
+const PRODUCT_COLOR_MAP: Record<string, string> = {
+  NOTIFY: "202 97% 45%",
+  CRM: "152 60% 42%",
+  BILLING: "38 92% 50%",
+  PAYMENTS: "38 92% 50%",
+  PAY: "38 92% 50%",
+  ANALYTICS: "270 60% 55%",
+  ANA: "270 60% 55%",
+  VPN: "340 65% 50%",
+};
+
+/** Default values for unmapped products. */
+const DEFAULT_COLOR = "220 14% 46%";
+const DEFAULT_ICON = "Package";
 
 export const productService = {
-  list: async (_wsId: string): Promise<Product[]> => {
-    await delay();
-    return MOCK_PRODUCTS;
+  /**
+   * Get products enrolled by the current user.
+   * Calls GET /products/me
+   */
+  getUserProducts: async (): Promise<UserProduct[]> => {
+    const products = await apiFetch<UserProduct[]>("/products/me");
+    return products;
   },
 
-  activate: async (_wsId: string, productId: string): Promise<Product> => {
-    await delay();
-    const p = MOCK_PRODUCTS.find((p) => p.id === productId)!;
-    return { ...p, active: true };
+  /**
+   * Get icon name for a product based on its code.
+   */
+  getProductIcon: (code: string): string => {
+    return PRODUCT_ICON_MAP[code.toUpperCase()] ?? DEFAULT_ICON;
   },
 
-  deactivate: async (_wsId: string, productId: string): Promise<Product> => {
-    await delay();
-    const p = MOCK_PRODUCTS.find((p) => p.id === productId)!;
-    return { ...p, active: false };
+  /**
+   * Get HSL color for a product based on its code.
+   */
+  getProductColor: (code: string): string => {
+    return PRODUCT_COLOR_MAP[code.toUpperCase()] ?? DEFAULT_COLOR;
   },
 };

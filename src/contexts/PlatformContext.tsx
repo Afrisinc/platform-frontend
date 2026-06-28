@@ -166,6 +166,39 @@ export const ROLE_PERMISSIONS: Record<ControlRole, Permission[]> = {
 };
 
 // ── Data Interfaces ──────────────────────────────────────────────────────────
+
+/** Product enrollment information from the API. */
+export interface ProductEnrollment {
+  enrollmentId: string;
+  accountId: string;
+  accountType: "INDIVIDUAL" | "ORGANIZATION";
+  status: "ACTIVE" | "SUSPENDED" | "CANCELLED";
+  plan: string;
+  enrolledAt: string;
+}
+
+/** User product from GET /products/me API. */
+export interface UserProduct {
+  id: string;
+  name: string;
+  code: string;
+  description: string | null;
+  status: "LIVE" | "BETA" | "INACTIVE";
+  baseUrl: string;
+  enrollment: ProductEnrollment;
+}
+
+/** Legacy product type for backward compatibility with existing components. */
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  url: string;
+  active: boolean;
+}
+
 export interface ControlUser {
   id: string;
   name: string;

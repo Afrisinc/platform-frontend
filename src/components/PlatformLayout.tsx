@@ -23,8 +23,15 @@ import SuperAdminDashboard from "@/pages/admin/SuperAdminDashboard";
 // ── Page routing ──────────────────────────────────────────────────────────────
 function PageRenderer() {
   const location = useLocation();
-  const { activePage, setActivePage, activeProductId, currentUser, can, hasProductAccess } =
-    usePlatform();
+  const {
+    activePage,
+    setActivePage,
+    activeProductId,
+    setActiveProductId,
+    currentUser,
+    can,
+    hasProductAccess,
+  } = usePlatform();
 
   // Sync URL to activePage: when URL changes (direct visit, browser back/forward), update activePage
   useEffect(() => {
@@ -39,6 +46,10 @@ function PageRenderer() {
     // Product path: /product/:id → product page with activeProductId
     const productMatch = pathname.match(/^\/product\/([a-zA-Z0-9-]+)$/);
     if (productMatch) {
+      const productId = productMatch[1];
+      if (activeProductId !== productId) {
+        setActiveProductId(productId);
+      }
       setActivePage("product");
       return;
     }
@@ -72,7 +83,7 @@ function PageRenderer() {
     if (activePage !== pageId) {
       setActivePage(pageId);
     }
-  }, [location.pathname, activePage, setActivePage]);
+  }, [location.pathname, activePage, setActivePage, activeProductId, setActiveProductId]);
 
   // Guard: if user tries to access a page they have no permission for, fall back to dashboard
   function guard(page: React.ReactNode, check: boolean): React.ReactNode {

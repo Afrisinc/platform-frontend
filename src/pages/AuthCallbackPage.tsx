@@ -35,7 +35,7 @@ export default function AuthCallbackPage() {
     try {
       const session = await authService.exchangeCode(code);
       authService.storeSession(session);
-      navigate("/", { replace: true });
+      navigate("/select-product", { replace: true });
     } catch {
       setError("Authentication failed. Redirecting to login…");
       setTimeout(() => authService.redirectToAuthUI(), 2000);
