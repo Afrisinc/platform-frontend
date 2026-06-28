@@ -58,7 +58,7 @@ jobs:
           envs: DEPLOY_GHCR_USERNAME,DEPLOY_GHCR_TOKEN
           script: |
             set -e
-            APP_PATH="${{ secrets.VPS_APP_PATH }}/control/production"
+            APP_PATH="${{ secrets.VPS_APP_PATH }}/control/prod"
             cd $APP_PATH
 
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
