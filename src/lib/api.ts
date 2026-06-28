@@ -1,11 +1,6 @@
-/**
- * Low-level API client for the Afrisinc platform.
- * Routes through the API Gateway — set VITE_API_URL in .env.
- * All higher-level calls live in platformApi.ts.
- */
+import { API_URL, AUTH_UI_URL } from "./env";
 
-/** API Gateway base URL — set VITE_API_URL in .env, defaults to gateway port. */
-export const API_BASE: string = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8091";
+export const API_BASE: string = API_URL;
 
 /** Pull JWT from the stored session (written by LoginPage after a real backend auth). */
 export function getStoredToken(): string | null {
@@ -49,11 +44,9 @@ export async function apiFetch<T>(
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
 
   if (res.status === 401) {
-    // Token expired or revoked — clear session and redirect to auth-ui
     localStorage.removeItem("ac_session");
-    const authUiUrl = (import.meta as any).env?.VITE_AUTH_UI_URL ?? "http://localhost:8098";
     const callbackUrl = `${window.location.origin}/auth/callback`;
-    window.location.href = `${authUiUrl}/login?redirect_uri=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = `${AUTH_UI_URL}/login?redirect_uri=${encodeURIComponent(callbackUrl)}`;
     throw new Error("[API] 401 session expired");
   }
 

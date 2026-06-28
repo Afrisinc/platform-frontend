@@ -35,16 +35,13 @@ jobs:
         with:
           context: .
           push: true
-          build-args: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_AUTH_UI_URL=${{ secrets.VITE_AUTH_UI_URL }}
           tags: |
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:sha-${{ github.sha }}
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:staging
 
       # Step 5: SSH deploy to VPS
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@mastere
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -63,6 +60,5 @@ jobs:
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
 
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose up -d
             docker image prune -af
-            docker compose ps

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Shield, ChevronDown, Wifi, WifiOff, ExternalLink } from "lucide-react";
+import { Shield, ChevronDown, Wifi, WifiOff, ExternalLink } from "lucide-react";
 import { TEAM_MEMBERS, ROLE_LABELS, SESSION_KEY } from "@/contexts/PlatformContext";
-
-const AUTH_UI_URL: string = (import.meta as any).env?.VITE_AUTH_UI_URL ?? "http://localhost:5173";
+import { AUTH_UI_URL } from "@/lib/env";
 
 /** Callback URL that auth-ui will redirect back to after a successful login. */
 const CALLBACK_URL = `${window.location.origin}/auth/callback`;

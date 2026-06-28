@@ -1,4 +1,5 @@
 import { API_BASE } from "@/lib/api";
+import { AUTH_UI_URL } from "@/lib/env";
 import { SESSION_KEY } from "@/contexts/PlatformContext";
 import type { ControlRole } from "@/contexts/PlatformContext";
 
@@ -143,8 +144,7 @@ export const authService = {
    */
   redirectToAuthUI(): void {
     this.clearSession();
-    const authUiUrl = import.meta.env.VITE_AUTH_UI_URL ?? "http://localhost:8098";
     const callbackUrl = `${window.location.origin}/auth/callback`;
-    window.location.href = `${authUiUrl}/login?redirect_uri=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = `${AUTH_UI_URL}/login?redirect_uri=${encodeURIComponent(callbackUrl)}`;
   },
 };

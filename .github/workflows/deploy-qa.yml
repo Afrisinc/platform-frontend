@@ -39,9 +39,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_AUTH_UI_URL=${{ secrets.VITE_AUTH_UI_URL }}
           tags: |
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:sha-${{ github.sha }}
             ghcr.io/${{ secrets.GHCR_OWNER }}/control:qa
@@ -67,6 +64,5 @@ jobs:
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
 
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose up -d
             docker image prune -af
-            docker compose ps
