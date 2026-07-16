@@ -419,6 +419,14 @@ export default function ProductSelectionPage() {
             <button type="button" className="hover:text-foreground transition-colors">
               Terms
             </button>
+            <a
+              href="https://afrisinc.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors"
+            >
+              Website
+            </a>
           </div>
         </div>
       </footer>
