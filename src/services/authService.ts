@@ -64,7 +64,7 @@ export const authService = {
    * Returns a complete AuthSession ready to be stored.
    */
   async exchangeCode(code: string): Promise<AuthSession> {
-    const res = await fetch(`${API_BASE}/oauth/exchange`, {
+    const res = await fetch(`${API_BASE}/auth/oauth/exchange`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code }),
@@ -86,7 +86,7 @@ export const authService = {
     let firstName = "";
     let lastName = "";
     try {
-      const profileRes = await fetch(`${API_BASE}/users/profile`, {
+      const profileRes = await fetch(`${API_BASE}/auth/users/profile`, {
         headers: { Authorization: `Bearer ${data.token}` },
       });
       if (profileRes.ok) {

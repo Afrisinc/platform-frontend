@@ -37,7 +37,7 @@ export const productService = {
    * Calls GET /products/me
    */
   getUserProducts: async (): Promise<UserProduct[]> => {
-    const products = await apiFetch<UserProduct[]>("/products/me");
+    const products = await apiFetch<UserProduct[]>("/auth/products/me");
     return products;
   },
 
