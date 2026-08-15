@@ -199,8 +199,8 @@ export default function ProductSelectionPage() {
         .toUpperCase()
     : "U";
 
-  // Show every product the user is enrolled in except cancelled ones. Products that are still
-  // provisioning (or have no baseUrl yet) are listed but not launchable — see canLaunch below.
+  // Show every product the user is enrolled in except cancelled ones. Products without a baseUrl
+  // are listed but not launchable — see canLaunch below.
   const visibleProducts = products.filter((p) => p.enrollment.status !== "CANCELLED");
 
   return (
@@ -328,10 +328,11 @@ export default function ProductSelectionPage() {
                 const isHovered = hoveredProduct === product.id;
                 const statusStyle = getStatusStyle(product.status);
                 const planStyle = PLAN_STYLES[product.enrollment.plan] || PLAN_STYLES.FREE;
-                // A product can only be opened once its enrollment is active and the backend has
-                // published a baseUrl to redirect to.
-                const canLaunch =
-                  product.enrollment.status === "ACTIVE" && product.baseUrl.trim() !== "";
+                // A published baseUrl is the backend's signal that a product is reachable — it is
+                // the only thing handleSelectProduct needs to redirect. Enrollment status is not
+                // used as a gate here because it carries product-lifecycle values (COMING_SOON)
+                // that do not describe whether the product can be opened.
+                const canLaunch = product.baseUrl.trim() !== "";
 
                 return (
                   <button
@@ -423,11 +424,7 @@ export default function ProductSelectionPage() {
                           )}
                         </p>
                         {!canLaunch && (
-                          <p className="text-xs text-warning mt-1.5">
-                            {product.enrollment.status === "PROVISIONING"
-                              ? "Setting up — available once provisioning completes"
-                              : "Not available yet"}
-                          </p>
+                          <p className="text-xs text-warning mt-1.5">Not available yet</p>
                         )}
                       </div>
 
