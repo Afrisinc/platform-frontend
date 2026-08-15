@@ -48,19 +48,50 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Package,
 };
 
+interface StatusStyle {
+  bg: string;
+  text: string;
+  border: string;
+  label: string;
+}
+
 /** Status badge styling based on product status. */
-const STATUS_STYLES: Record<string, { bg: string; text: string; border: string; label: string }> = {
+const STATUS_STYLES: Record<string, StatusStyle> = {
   LIVE: {
     bg: "bg-success/10",
     text: "text-success",
     border: "border-success/20",
     label: "Live",
   },
+  ACTIVE: {
+    bg: "bg-success/10",
+    text: "text-success",
+    border: "border-success/20",
+    label: "Active",
+  },
   BETA: {
     bg: "bg-warning/10",
     text: "text-warning",
     border: "border-warning/20",
     label: "Beta",
+  },
+  COMING_SOON: {
+    bg: "bg-primary/10",
+    text: "text-primary",
+    border: "border-primary/20",
+    label: "Coming soon",
+  },
+  PROVISIONING: {
+    bg: "bg-warning/10",
+    text: "text-warning",
+    border: "border-warning/20",
+    label: "Provisioning",
+  },
+  SUSPENDED: {
+    bg: "bg-destructive/10",
+    text: "text-destructive",
+    border: "border-destructive/20",
+    label: "Suspended",
   },
   INACTIVE: {
     bg: "bg-muted",
@@ -69,6 +100,19 @@ const STATUS_STYLES: Record<string, { bg: string; text: string; border: string; 
     label: "Inactive",
   },
 };
+
+/**
+ * Resolve the badge for a product status. Unknown statuses render neutrally with the raw value
+ * humanised rather than falling back to "Inactive", which would misreport the product's state.
+ */
+function getStatusStyle(status: string): StatusStyle {
+  return (
+    STATUS_STYLES[status] ?? {
+      ...STATUS_STYLES.INACTIVE,
+      label: status.replace(/_/g, " ").toLowerCase(),
+    }
+  );
+}
 
 /** Plan badge styling. */
 const PLAN_STYLES: Record<string, { bg: string; text: string; border: string }> = {
@@ -155,8 +199,9 @@ export default function ProductSelectionPage() {
         .toUpperCase()
     : "U";
 
-  // Filter to only show products with active enrollment
-  const activeProducts = products.filter((p) => p.enrollment.status === "ACTIVE");
+  // Show every product the user is enrolled in except cancelled ones. Products that are still
+  // provisioning (or have no baseUrl yet) are listed but not launchable — see canLaunch below.
+  const visibleProducts = products.filter((p) => p.enrollment.status !== "CANCELLED");
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -218,9 +263,9 @@ export default function ProductSelectionPage() {
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 Your Products
               </h2>
-              {!loading && !error && activeProducts.length > 0 && (
+              {!loading && !error && visibleProducts.length > 0 && (
                 <span className="px-2 py-0.5 rounded-full bg-muted text-xs font-medium text-muted-foreground">
-                  {activeProducts.length}
+                  {visibleProducts.length}
                 </span>
               )}
             </div>
@@ -256,7 +301,7 @@ export default function ProductSelectionPage() {
           )}
 
           {/* Empty state */}
-          {!loading && !error && activeProducts.length === 0 && (
+          {!loading && !error && visibleProducts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 px-6 rounded-2xl border-2 border-dashed border-border bg-muted/20">
               <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
                 <Package className="w-8 h-8 text-muted-foreground" />
@@ -274,26 +319,33 @@ export default function ProductSelectionPage() {
           )}
 
           {/* Product grid */}
-          {!loading && !error && activeProducts.length > 0 && (
+          {!loading && !error && visibleProducts.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {activeProducts.map((product) => {
+              {visibleProducts.map((product) => {
                 const iconName = productService.getProductIcon(product.code);
                 const color = productService.getProductColor(product.code);
                 const IconComponent = ICON_MAP[iconName] || Package;
                 const isHovered = hoveredProduct === product.id;
-                const statusStyle = STATUS_STYLES[product.status] || STATUS_STYLES.INACTIVE;
+                const statusStyle = getStatusStyle(product.status);
                 const planStyle = PLAN_STYLES[product.enrollment.plan] || PLAN_STYLES.FREE;
+                // A product can only be opened once its enrollment is active and the backend has
+                // published a baseUrl to redirect to.
+                const canLaunch =
+                  product.enrollment.status === "ACTIVE" && product.baseUrl.trim() !== "";
 
                 return (
                   <button
                     key={product.id}
+                    disabled={!canLaunch}
                     onClick={() => handleSelectProduct(product)}
-                    onMouseEnter={() => setHoveredProduct(product.id)}
+                    onMouseEnter={() => canLaunch && setHoveredProduct(product.id)}
                     onMouseLeave={() => setHoveredProduct(null)}
                     className={cn(
                       "group relative text-left w-full rounded-2xl border bg-card p-6 transition-all duration-200",
-                      "hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30",
                       "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background",
+                      canLaunch
+                        ? "hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30 cursor-pointer"
+                        : "opacity-60 cursor-not-allowed",
                       isHovered && "border-primary/30 shadow-lg shadow-primary/5"
                     )}
                   >
@@ -363,7 +415,20 @@ export default function ProductSelectionPage() {
                           {product.enrollment.accountType === "ORGANIZATION"
                             ? "Organization account"
                             : "Individual account"}
+                          {product.partner && (
+                            <>
+                              <span className="mx-1.5">·</span>
+                              <span>by {product.partner.name}</span>
+                            </>
+                          )}
                         </p>
+                        {!canLaunch && (
+                          <p className="text-xs text-warning mt-1.5">
+                            {product.enrollment.status === "PROVISIONING"
+                              ? "Setting up — available once provisioning completes"
+                              : "Not available yet"}
+                          </p>
+                        )}
                       </div>
 
                       {/* Arrow indicator */}
@@ -394,7 +459,7 @@ export default function ProductSelectionPage() {
         </div>
 
         {/* Quick tip */}
-        {!loading && !error && activeProducts.length > 0 && (
+        {!loading && !error && visibleProducts.length > 0 && (
           <div className="mt-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <span className="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Enter</span>
             <span>to select</span>

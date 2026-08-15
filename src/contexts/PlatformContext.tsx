@@ -172,9 +172,15 @@ export interface ProductEnrollment {
   enrollmentId: string;
   accountId: string;
   accountType: "INDIVIDUAL" | "ORGANIZATION";
-  status: "ACTIVE" | "SUSPENDED" | "CANCELLED";
+  status: "ACTIVE" | "PROVISIONING" | "COMING_SOON" | "SUSPENDED" | "CANCELLED";
   plan: string;
   enrolledAt: string;
+}
+
+/** Partner owning a product, when it is not a first-party product. */
+export interface ProductPartner {
+  id: string;
+  name: string;
 }
 
 /** User product from GET /products/me API. */
@@ -183,8 +189,9 @@ export interface UserProduct {
   name: string;
   code: string;
   description: string | null;
-  status: "LIVE" | "BETA" | "INACTIVE";
+  status: "LIVE" | "ACTIVE" | "BETA" | "COMING_SOON" | "PROVISIONING" | "INACTIVE";
   baseUrl: string;
+  partner: ProductPartner | null;
   enrollment: ProductEnrollment;
 }
 
